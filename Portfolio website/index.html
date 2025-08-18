@@ -11,128 +11,102 @@
       --bg2:#10204a;
       --text:#e6e9f2;
       --muted:#a2a9c5;
-      --card:#0f1a34cc;            /* glass */
+      --glass:#0f1a34cc;
       --border:#ffffff1f;
       --accent:#7fd0ff;
-      --radius:22px;
-      --shadow: 0 10px 30px rgba(0,0,0,.45);
-      --shadow-strong: 0 16px 60px rgba(0,0,0,.6);
+      --r:22px;
+      --shadow:0 10px 30px rgba(0,0,0,.45);
+      --shadow-strong:0 18px 70px rgba(0,0,0,.65);
     }
     *{box-sizing:border-box}
     html,body{height:100%}
     body{
       margin:0;
-      font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, Arial, "Apple Color Emoji", "Segoe UI Emoji";
+      font-family:Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, Arial;
       color:var(--text);
-      background: radial-gradient(1200px 800px at 10% -10%, #13224d66 0%, transparent 60%), linear-gradient(120deg,var(--bg1),var(--bg2));
+      background: radial-gradient(1400px 900px at 15% -20%, #1b2e6b50 0%, transparent 55%), linear-gradient(120deg,var(--bg1),var(--bg2));
     }
     a{color:inherit;text-decoration:none}
-    img{max-width:100%;display:block}
 
-    /* --- Shell --- */
-    .wrap{max-width:1200px;margin:0 auto;padding:24px 20px 120px}
-    header{
-      display:flex;align-items:center;justify-content:space-between;gap:16px;
-      margin-bottom:24px;
-    }
-    .me{
-      display:flex;align-items:center;gap:14px;
-    }
-    .me img{
-      width:54px;height:54px;border-radius:50%;object-fit:cover;border:1px solid var(--border);
-      box-shadow:0 6px 18px rgba(0,0,0,.35);
-    }
-    .me h1{font-size:18px;margin:0}
+    /* Shell */
+    .wrap{max-width:1200px;margin:0 auto;padding:24px 20px 160px}
+    header{display:flex;align-items:center;justify-content:space-between;gap:16px;margin-bottom:28px}
+    .me{display:flex;align-items:center;gap:14px}
+    .me img{width:56px;height:56px;border-radius:50%;object-fit:cover;border:1px solid var(--border);box-shadow:0 6px 18px rgba(0,0,0,.35)}
+    .me h1{margin:0;font-size:19px}
     .me p{margin:2px 0 0;color:var(--muted);font-size:13px}
-
-    nav{display:flex;gap:14px;flex-wrap:wrap}
-    .pill{
-      padding:8px 12px;border-radius:999px;border:1px solid var(--border);background:linear-gradient( to bottom, #0f1a34cc, #0d1630cc);
-      font-size:13px;color:var(--text)
-    }
+    nav{display:flex;gap:12px;flex-wrap:wrap}
+    .pill{padding:8px 12px;border-radius:999px;border:1px solid var(--border);background:linear-gradient(to bottom,#0f1a34cc,#0e1833cc);font-size:13px}
     .pill:hover{border-color:#ffffff33}
 
-    /* --- Section: Stacked Cards --- */
-    .stack-section{position:relative;height:170vh;margin-top:16px}
-    .pin{
-      position:sticky;top:8vh;height:84vh;display:grid;place-items:center;
-      padding:10px;
-    }
-    .stack{
+    /* Stacked Categories (horizontal) */
+    .stack-section{position:relative;height:160vh;margin-top:8px}
+    .pin{position:sticky;top:8vh;height:84vh;display:grid;place-items:center;padding:8px}
+    .stage{
       position:relative;
-      width:min(1000px, 92vw);
-      /* This height is just a nice stage area; cards are absolutely stacked inside */
-      height:min(620px, 56vw);
+      width:min(1080px, 94vw);
+      height:min(560px, 70vh);
     }
 
     .card{
-      position:absolute;left:50%;transform:translateX(-50%);
-      width:min(900px, 86vw);
-      aspect-ratio:16 / 9;
-      background:var(--card);
+      position:absolute;top:50%;left:50%;
+      width:min(240px, 24vw);           /* portrait phone-like */
+      aspect-ratio:9 / 16;               /* portrait */
+      background:var(--glass);
       border:1px solid var(--border);
-      border-radius:var(--radius);
+      border-radius:calc(var(--r) + 6px);
       box-shadow:var(--shadow);
       overflow:hidden;
-      transition: box-shadow .25s ease, filter .25s ease;
-      will-change: transform;
-      outline: none;
+      transform:translate(-50%,-50%);
+      transition:box-shadow .25s ease, filter .25s ease;
+      outline:none;
+      will-change:transform;
     }
     .card:hover,
     .card:focus-visible{
       box-shadow:var(--shadow-strong);
-      filter: saturate(1.02);
-      z-index:999; /* bring to front on hover/focus */
+      filter:saturate(1.04);
+      z-index:999;
     }
 
-    .media{
-      position:absolute;inset:0;overflow:hidden;
-    }
-    .media img,
-    .media video{ /* if you later swap to mp4 */
-      width:100%;height:100%;object-fit:cover;
-    }
+    .media{position:absolute;inset:0;overflow:hidden}
+    .media img{width:100%;height:100%;object-fit:cover}
     .fade{
       position:absolute;inset:0;
-      background: linear-gradient(180deg, #00000010, #00000055);
+      background:linear-gradient(180deg,#0000,#00000066 80%);
+      pointer-events:none;
     }
     .label{
-      position:absolute;left:16px;bottom:14px;right:14px;
-      display:flex;justify-content:space-between;align-items:center;gap:12px;
-      padding:12px 14px;border-radius:14px;background:#0e1936b0;border:1px solid var(--border);
-      backdrop-filter: blur(6px);
+      position:absolute;left:10px;right:10px;bottom:10px;
+      display:flex;justify-content:space-between;align-items:center;gap:10px;
+      padding:10px 12px;border-radius:14px;background:#0e1936b0;border:1px solid var(--border);
+      backdrop-filter:blur(6px)
     }
-    .label h3{margin:0;font-size:18px;color:#9fdcff;font-weight:700;letter-spacing:.2px}
-    .label .open{
-      display:inline-flex;align-items:center;gap:8px;font-size:13px;color:#bcd9f5;
-      padding:8px 10px;border:1px solid var(--border);border-radius:999px;background:#0e1833a0;
-      transition:transform .2s ease;
-    }
-    .card:hover .open,
-    .card:focus-visible .open{transform:translateX(2px)}
-    .open svg{width:16px;height:16px;opacity:.9}
+    .label h3{margin:0;font-size:14px;color:#9fdcff;letter-spacing:.2px}
+    .open{display:inline-flex;align-items:center;gap:6px;font-size:12px;color:#cfe7ff;padding:6px 8px;border:1px solid var(--border);border-radius:999px;background:#0e1833a0}
+    .open svg{width:14px;height:14px;opacity:.9}
 
-    /* --- Reduced motion --- */
-    @media (prefers-reduced-motion: reduce){
+    /* Footer spacer */
+    .spacer{height:50vh}
+
+    @media (max-width:900px){
+      .stage{height:min(520px,72vh)}
+      .card{width:min(220px, 32vw)}
+    }
+    @media (max-width:640px){
+      .card{width:min(220px, 40vw)}
+    }
+    @media (prefers-reduced-motion:reduce){
       .card{transition:none}
-    }
-
-    /* --- Simple footer spacing --- */
-    .spacer{height:40vh}
-    @media (max-width: 800px){
-      .stack-section{height:150vh}
-      .pin{top:6vh;height:88vh}
-      .label h3{font-size:16px}
     }
   </style>
 </head>
 <body>
   <div class="wrap">
-
-    <!-- Header / Hero (minimal) -->
+    <!-- Header / Hero (kept minimal as before) -->
     <header>
       <div class="me">
-        <img src="avatar.jpg" alt="Portrait of Shayan" loading="eager">
+        <img src="avatar.jpg" alt="Portrait of Shayan">
         <div>
           <h1>Shayan Hezarkhani</h1>
           <p>Motion graphics · Video edits · Graphic design · Art direction</p>
@@ -146,68 +120,72 @@
       </nav>
     </header>
 
-    <!-- Stacked Category Cards -->
+    <!-- Stacked Categories (horizontal, portrait) -->
     <section class="stack-section" aria-label="Featured categories">
       <div class="pin">
-        <div class="stack" id="stack">
-          <!-- 1) Motion Graphics (Earf.gif) -->
-          <a href="motion-graphics.html" class="card" data-title="Motion Graphics" data-i="0" aria-label="Open Motion Graphics">
+        <div class="stage" id="stage">
+          <!-- Leftmost card (slight counter-clockwise, pivot top-right) -->
+          <a class="card" href="graphic-design.html" data-i="0" aria-label="Open Graphic Design"
+             style="transform-origin: top right;">
             <div class="media">
-              <img src="Earf.gif" alt="Motion Graphics preview (Earf animation)" />
-              <div class="fade" aria-hidden="true"></div>
-            </div>
-            <div class="label">
-              <h3>Motion Graphics</h3>
-              <span class="open">Open
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                  <path d="M7 17L17 7M7 7h10v10"/>
-                </svg>
-              </span>
-            </div>
-          </a>
-
-          <!-- 2) Video Edits -->
-          <a href="video-edits.html" class="card" data-title="Video Edits" data-i="1" aria-label="Open Video Edits">
-            <div class="media">
-              <img src="placeholder-2.jpg" alt="Video edits preview" />
-              <div class="fade" aria-hidden="true"></div>
-            </div>
-            <div class="label">
-              <h3>Video Edits</h3>
-              <span class="open">Open
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                  <path d="M7 17L17 7M7 7h10v10"/>
-                </svg>
-              </span>
-            </div>
-          </a>
-
-          <!-- 3) Graphic Design -->
-          <a href="graphic-design.html" class="card" data-title="Graphic Design" data-i="2" aria-label="Open Graphic Design">
-            <div class="media">
-              <img src="placeholder-3.jpg" alt="Graphic design preview" />
+              <img src="placeholder-3.jpg" alt="Graphic design preview">
               <div class="fade" aria-hidden="true"></div>
             </div>
             <div class="label">
               <h3>Graphic Design</h3>
               <span class="open">Open
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
                   <path d="M7 17L17 7M7 7h10v10"/>
                 </svg>
               </span>
             </div>
           </a>
 
-          <!-- 4) Art Direction -->
-          <a href="art-direction.html" class="card" data-title="Art Direction" data-i="3" aria-label="Open Art Direction">
+          <!-- Slightly left (pivot bottom-right) -->
+          <a class="card" href="video-edits.html" data-i="1" aria-label="Open Video Edits"
+             style="transform-origin: bottom right;">
             <div class="media">
-              <img src="placeholder-4.jpg" alt="Art direction preview" />
+              <img src="placeholder-2.jpg" alt="Video edits preview">
+              <div class="fade" aria-hidden="true"></div>
+            </div>
+            <div class="label">
+              <h3>Video Edits</h3>
+              <span class="open">Open
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <path d="M7 17L17 7M7 7h10v10"/>
+                </svg>
+              </span>
+            </div>
+          </a>
+
+          <!-- Slightly right (pivot top-left) – Motion Graphics (Earf.gif) -->
+          <a class="card" href="motion-graphics.html" data-i="2" aria-label="Open Motion Graphics"
+             style="transform-origin: top left;">
+            <div class="media">
+              <img src="Earf.gif" alt="Motion graphics preview (Earf animation)">
+              <div class="fade" aria-hidden="true"></div>
+            </div>
+            <div class="label">
+              <h3>Motion Graphics</h3>
+              <span class="open">Open
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <path d="M7 17L17 7M7 7h10v10"/>
+                </svg>
+              </span>
+            </div>
+          </a>
+
+          <!-- Rightmost (pivot bottom-left) -->
+          <a class="card" href="art-direction.html" data-i="3" aria-label="Open Art Direction"
+             style="transform-origin: bottom left;">
+            <div class="media">
+              <img src="placeholder-4.jpg" alt="Art direction preview">
               <div class="fade" aria-hidden="true"></div>
             </div>
             <div class="label">
               <h3>Art Direction</h3>
               <span class="open">Open
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
                   <path d="M7 17L17 7M7 7h10v10"/>
                 </svg>
               </span>
@@ -218,50 +196,51 @@
     </section>
 
     <div class="spacer"></div>
-
   </div>
 
   <script>
     (function(){
       const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
       const section = document.querySelector('.stack-section');
-      const stack   = document.getElementById('stack');
-      const cards   = Array.from(stack.querySelectorAll('.card'));
+      const stage   = document.getElementById('stage');
+      const cards   = Array.from(stage.querySelectorAll('.card'));
 
-      // Base rotations for the "fan" look at the start
-      const baseRot = [-5, -1.5, 1.5, 5]; // degrees
-      // Overlap at start vs gap at the end (in px)
-      const startOverlap = -26;  // tighter negative numbers = more overlap
-      const endGap = 120;        // spacing when fully separated
-      // Vertical lift baseline so the stack stays centered
-      const baseLift = -40;
+      // Initial "fan" angles (deg) and depth order. Negative = counter-clockwise.
+      const baseRot = [-10, -4, 5, 12];
 
-      // Initialize z-index order so the first card sits on top initially
-      cards.forEach((c, i) => c.style.zIndex = (100 - i).toString());
+      // X spread from center when fully opened (px)
+      const spread = 240;     // how far each step moves sideways at progress 1
+      const overlap = -80;    // initial horizontal overlap between neighbors (negative pulls inward)
+      const lift = -10;       // slight vertical offset to keep center aligned
 
-      function clamp(v, min, max){ return Math.max(min, Math.min(max, v)); }
-      function lerp(a, b, t){ return a + (b - a) * t; }
+      // z-index base so center cards stack logically
+      cards.forEach((c, i) => c.style.zIndex = (100 + i).toString());
+
+      function clamp(v,min,max){ return Math.max(min, Math.min(max, v)); }
+      function lerp(a,b,t){ return a + (b - a) * t; }
 
       function update(){
-        const secRect = section.getBoundingClientRect();
-        const vh = window.innerHeight;
+        const rect = section.getBoundingClientRect();
+        const vh   = window.innerHeight;
+        const total = section.offsetHeight - vh;
+        const raw = 1 - (rect.bottom - vh) / (total || 1);
+        const t = clamp(raw, 0, 1);  // 0..1 scroll progress
 
-        // progress: 0 when section enters, 1 near the end of the section
-        const totalScrollable = section.offsetHeight - vh;
-        let raw = 1 - (secRect.bottom - vh) / (totalScrollable || 1);
-        const progress = clamp(raw, 0, 1);
+        // Center index (2 cards to the left, 2 to the right)
+        const center = (cards.length - 1)/2;
 
         cards.forEach((card, i) => {
-          // y offset transitions from tight overlap to roomy gap
-          const y = baseLift + i * lerp(startOverlap, endGap, progress);
+          const dir = i - center; // -1.5, -0.5, 0.5, 1.5 for 4 cards
+          // X: start slightly overlapping; end pushed sideways
+          const x = lerp(dir * overlap, dir * spread, t);
+          // Y: tiny lift so they don't drift vertically
+          const y = lift;
+          // Rotation relaxes to near-straight
+          const r = lerp(baseRot[i] || 0, dir * 1.5, t); // leaves a hint of angle at end
+          // Scale: subtle growth on open
+          const s = lerp(0.98, 1.0, t);
 
-          // rotate from fan → straight
-          const r = lerp(baseRot[i] || 0, 0, progress);
-
-          // subtle scale on spread
-          const s = lerp(0.98, 1.0, progress);
-
-          card.style.transform = `translateX(-50%) translateY(${y}px) rotate(${r}deg) scale(${s})`;
+          card.style.transform = `translate(calc(-50% + ${x}px), calc(-50% + ${y}px)) rotate(${r}deg) scale(${s})`;
         });
 
         requestAnimationFrame(update);
@@ -270,22 +249,23 @@
       if (!prefersReduced){
         requestAnimationFrame(update);
       }else{
-        // Reduced motion: set a calm separated state
+        // Reduced motion: calm, slightly separated state
+        const center = (cards.length - 1)/2;
         cards.forEach((card, i) => {
-          const y = baseLift + i * 80;
-          card.style.transform = `translateX(-50%) translateY(${y}px) rotate(0deg) scale(1)`;
+          const dir = i - center;
+          const x = dir * (spread * 0.6);
+          card.style.transform = `translate(calc(-50% + ${x}px), -50%) rotate(${dir * 1.5}deg) scale(1)`;
         });
       }
 
-      // Keyboard accessibility: bring focused card to front, mirror hover behavior
-      cards.forEach(c => {
-        c.addEventListener('focus', () => c.style.zIndex = '999');
-        c.addEventListener('blur',  () => c.style.zIndex = '100'); // will be recalculated by hover anyway
-        c.addEventListener('mouseenter', () => c.style.zIndex = '999');
-        c.addEventListener('mouseleave',  () => c.style.zIndex = '100');
+      // Hover/focus bring-to-front behavior
+      cards.forEach((c,i)=>{
+        const base = 100 + i;
+        c.addEventListener('mouseenter', ()=> c.style.zIndex = '999');
+        c.addEventListener('mouseleave', ()=> c.style.zIndex = String(base));
+        c.addEventListener('focus',     ()=> c.style.zIndex = '999');
+        c.addEventListener('blur',      ()=> c.style.zIndex = String(base));
       });
-
-      // Optional: make the entire label act as a drag blocker on mobile (no special handling needed for now)
     })();
   </script>
 </body>
