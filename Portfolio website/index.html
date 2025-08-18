@@ -1,272 +1,301 @@
-<!doctype html>
-<html lang="en">
+<!DOCTYPE html>
+<html lang="en" style="scroll-behavior: smooth;">
 <head>
   <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Shayan — Portfolio</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>Shayan Hezarkhani Portfolio</title>
+  <meta name="theme-color" content="#0a1224">
+
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
 
   <style>
     :root{
-      --bg1:#0a1224;
-      --bg2:#10204a;
-      --text:#e6e9f2;
+      --bg1:#0a1224;            /* dark navy */
+      --bg2:#10204a;            /* brighter navy */
+      --glass: rgba(255,255,255,.06);
+      --border: rgba(255,255,255,.12);
+      --text: #e6e9f2;
       --muted:#a2a9c5;
-      --glass:#0f1a34cc;
-      --border:#ffffff1f;
-      --accent:#7fd0ff;
-      --r:22px;
-      --shadow:0 10px 30px rgba(0,0,0,.45);
-      --shadow-strong:0 18px 70px rgba(0,0,0,.65);
+      --accent:#66c2ff;
+      --radius:16px;
+      --shadow:0 8px 30px rgba(0,0,0,.35);
+
+      /* Card preview knobs */
+      --thumb-open: 220px;      /* max visible preview on hover */
+      --thumb-radius: 14px;
+      --anim: .3s cubic-bezier(.2,.6,.2,1);
     }
     *{box-sizing:border-box}
     html,body{height:100%}
     body{
       margin:0;
-      font-family:Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, Arial;
+      font-family:Inter, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
       color:var(--text);
-      background: radial-gradient(1400px 900px at 15% -20%, #1b2e6b50 0%, transparent 55%), linear-gradient(120deg,var(--bg1),var(--bg2));
+      background: linear-gradient(120deg, var(--bg1), var(--bg2));
+      background-size: 200% 200%;
+      animation: bgShift 18s ease-in-out infinite alternate;
+      line-height:1.55;
     }
-    a{color:inherit;text-decoration:none}
-
-    /* Shell */
-    .wrap{max-width:1200px;margin:0 auto;padding:24px 20px 160px}
-    header{display:flex;align-items:center;justify-content:space-between;gap:16px;margin-bottom:28px}
-    .me{display:flex;align-items:center;gap:14px}
-    .me img{width:56px;height:56px;border-radius:50%;object-fit:cover;border:1px solid var(--border);box-shadow:0 6px 18px rgba(0,0,0,.35)}
-    .me h1{margin:0;font-size:19px}
-    .me p{margin:2px 0 0;color:var(--muted);font-size:13px}
-    nav{display:flex;gap:12px;flex-wrap:wrap}
-    .pill{padding:8px 12px;border-radius:999px;border:1px solid var(--border);background:linear-gradient(to bottom,#0f1a34cc,#0e1833cc);font-size:13px}
-    .pill:hover{border-color:#ffffff33}
-
-    /* Stacked Categories (horizontal) */
-    .stack-section{position:relative;height:160vh;margin-top:8px}
-    .pin{position:sticky;top:8vh;height:84vh;display:grid;place-items:center;padding:8px}
-    .stage{
-      position:relative;
-      width:min(1080px, 94vw);
-      height:min(560px, 70vh);
+    @keyframes bgShift{
+      from{ background-position: 0% 0%;}
+      to{ background-position: 100% 100%;}
     }
 
+    a{color:var(--accent); text-decoration:none}
+    a:hover{text-decoration:underline}
+    img{max-width:100%; display:block}
+    .container{width:min(1100px,92%); margin:0 auto}
+
+    /* Header */
+    header{
+      position:sticky; top:0; z-index:1000;
+      backdrop-filter: blur(8px) saturate(130%);
+      background: linear-gradient(180deg, rgba(10,18,36,.6), rgba(10,18,36,.25));
+      border-bottom:1px solid var(--border);
+    }
+    .nav{display:flex; align-items:center; justify-content:space-between; gap:1rem; padding:.9rem 0}
+    .brand{font-weight:800; letter-spacing:.3px}
+    .brand a{color:var(--text); text-decoration:none}
+    .nav a{color:var(--text); opacity:.9}
+    .nav a:hover{opacity:1}
+    .nav-links{display:flex; gap:1rem}
+
+    /* Hero */
+    .hero{padding:4rem 0 3rem}
+    .hero-grid{display:grid; grid-template-columns: .9fr 1.1fr; gap:2rem; align-items:center}
+    .frame{
+      background: var(--glass); border:1px solid var(--border); border-radius: 28px;
+      box-shadow: var(--shadow); padding:.6rem; overflow:hidden;
+    }
+    .avatar{
+      aspect-ratio: 4/5; object-fit: cover; width:100%;
+      border-radius: 22px;
+    }
+    .tag{display:inline-block; padding:.35rem .65rem; border:1px solid var(--border); border-radius:999px; color:var(--muted); font-size:.9rem}
+    h1{margin:.6rem 0 1rem; font-size:clamp(1.8rem, 4vw, 2.6rem)}
+    .lead{color:var(--muted); font-size:clamp(1rem, 2.3vw, 1.12rem)}
+    .socials{display:flex; gap:.6rem; margin-top:1rem}
+    .icon-btn{
+      width:42px; height:42px; display:grid; place-items:center; border-radius:12px;
+      background:var(--glass); border:1px solid var(--border);
+    }
+
+    /* Sections */
+    section{padding:2.5rem 0}
+
+    /* Portfolio Categories row */
+    .row4{
+      display:grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap:1rem;
+    }
+
+    /* Hover-to-open card */
     .card{
-      position:absolute;top:50%;left:50%;
-      width:min(240px, 24vw);           /* portrait phone-like */
-      aspect-ratio:9 / 16;               /* portrait */
-      background:var(--glass);
+      position:relative;
+      display:flex;
+      flex-direction:column;
+      justify-content:flex-end; /* keep label pinned to bottom */
+      background:linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.02));
       border:1px solid var(--border);
-      border-radius:calc(var(--r) + 6px);
-      box-shadow:var(--shadow);
+      border-radius:var(--radius);
       overflow:hidden;
-      transform:translate(-50%,-50%);
-      transition:box-shadow .25s ease, filter .25s ease;
-      outline:none;
-      will-change:transform;
+      min-height:160px;                 /* compact at rest */
+      box-shadow: var(--shadow);
+      transform: translateY(8px);
+      opacity:0;
+      transition: transform .6s ease, opacity .6s ease;
+      will-change: transform;
+      text-decoration:none;
     }
-    .card:hover,
-    .card:focus-visible{
-      box-shadow:var(--shadow-strong);
-      filter:saturate(1.04);
-      z-index:999;
+    .card.reveal{transform:none; opacity:1}
+
+    /* The preview area that opens */
+    .thumb{
+      width:100%;
+      max-height:0;                     /* collapsed */
+      overflow:hidden;
+      opacity:.0;
+      transition: max-height var(--anim), opacity var(--anim);
+      border-bottom:1px solid var(--border);
+      background:#00000020;
+    }
+    .thumb img{
+      width:100%;
+      height:auto;
+      display:block;
+      object-fit:cover;
+      border-top-left-radius:calc(var(--radius) - 2px);
+      border-top-right-radius:calc(var(--radius) - 2px);
     }
 
-    .media{position:absolute;inset:0;overflow:hidden}
-    .media img{width:100%;height:100%;object-fit:cover}
-    .fade{
-      position:absolute;inset:0;
-      background:linear-gradient(180deg,#0000,#00000066 80%);
-      pointer-events:none;
-    }
+    /* Bottom label stays fixed */
     .label{
-      position:absolute;left:10px;right:10px;bottom:10px;
-      display:flex;justify-content:space-between;align-items:center;gap:10px;
-      padding:10px 12px;border-radius:14px;background:#0e1936b0;border:1px solid var(--border);
-      backdrop-filter:blur(6px)
+      display:flex; align-items:center; justify-content:space-between; gap:.8rem;
+      padding:1rem;
     }
-    .label h3{margin:0;font-size:14px;color:#9fdcff;letter-spacing:.2px}
-    .open{display:inline-flex;align-items:center;gap:6px;font-size:12px;color:#cfe7ff;padding:6px 8px;border:1px solid var(--border);border-radius:999px;background:#0e1833a0}
-    .open svg{width:14px;height:14px;opacity:.9}
+    .label h3{margin:0; font-size:1.1rem; color:#8fd0ff}
+    .arrow{font-size:1.2rem; opacity:.75}
 
-    /* Footer spacer */
-    .spacer{height:50vh}
+    /* Hover/focus opens preview upward (and a bit downward by growing the card) */
+    .card:hover .thumb,
+    .card:focus-within .thumb{
+      max-height:var(--thumb-open);
+      opacity:1;
+    }
 
-    @media (max-width:900px){
-      .stage{height:min(520px,72vh)}
-      .card{width:min(220px, 32vw)}
-    }
-    @media (max-width:640px){
-      .card{width:min(220px, 40vw)}
-    }
-    @media (prefers-reduced-motion:reduce){
-      .card{transition:none}
+    /* Gentle grow on hover for the whole card */
+    .card:hover{outline:none}
+    .card:hover .label .arrow{transform:translateX(1px)}
+    .label .arrow{transition:transform var(--anim)}
+
+    /* Footer */
+    footer{padding:2.5rem 0 3.5rem; color:var(--muted)}
+    .footer-row{display:flex; justify-content:space-between; align-items:center; gap:1rem; border-top:1px solid var(--border); padding-top:1rem}
+
+    /* Responsive */
+    @media (max-width: 980px){ .hero-grid{grid-template-columns:1fr} }
+    @media (max-width: 900px){ .row4{grid-template-columns: repeat(2, 1fr);} }
+    @media (max-width: 560px){ .row4{grid-template-columns: 1fr;} }
+
+    @media (prefers-reduced-motion: reduce){
+      *{animation:none!important; transition:none!important; scroll-behavior:auto!important}
+      .thumb{max-height:0!important; opacity:1!important} /* just snap open/closed via focus if needed */
     }
   </style>
 </head>
 <body>
-  <div class="wrap">
-    <!-- Header / Hero (kept minimal as before) -->
-    <header>
-      <div class="me">
-        <img src="avatar.jpg" alt="Portrait of Shayan">
-        <div>
-          <h1>Shayan Hezarkhani</h1>
-          <p>Motion graphics · Video edits · Graphic design · Art direction</p>
-        </div>
-      </div>
-      <nav aria-label="Sections">
-        <a class="pill" href="motion-graphics.html">Motion Graphics</a>
-        <a class="pill" href="video-edits.html">Video Edits</a>
-        <a class="pill" href="graphic-design.html">Graphic Design</a>
-        <a class="pill" href="art-direction.html">Art Direction</a>
+  <a class="skip" href="#main" style="position:absolute;left:-9999px;top:auto;width:1px;height:1px;overflow:hidden;">Skip to content</a>
+
+  <header>
+    <div class="container nav">
+      <div class="brand"><a href="#">Shayan Hezarkhani Portfolio</a></div>
+      <nav class="nav-links" aria-label="Primary">
+        <a href="#about">About Me</a>
+        <a href="#portfolio">Portfolio</a>
+        <a href="#contact">Contact</a>
       </nav>
-    </header>
+    </div>
+  </header>
 
-    <!-- Stacked Categories (horizontal, portrait) -->
-    <section class="stack-section" aria-label="Featured categories">
-      <div class="pin">
-        <div class="stage" id="stage">
-          <!-- Leftmost card (slight counter-clockwise, pivot top-right) -->
-          <a class="card" href="graphic-design.html" data-i="0" aria-label="Open Graphic Design"
-             style="transform-origin: top right;">
-            <div class="media">
-              <img src="placeholder-3.jpg" alt="Graphic design preview">
-              <div class="fade" aria-hidden="true"></div>
-            </div>
-            <div class="label">
-              <h3>Graphic Design</h3>
-              <span class="open">Open
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                  <path d="M7 17L17 7M7 7h10v10"/>
-                </svg>
-              </span>
-            </div>
-          </a>
-
-          <!-- Slightly left (pivot bottom-right) -->
-          <a class="card" href="video-edits.html" data-i="1" aria-label="Open Video Edits"
-             style="transform-origin: bottom right;">
-            <div class="media">
-              <img src="placeholder-2.jpg" alt="Video edits preview">
-              <div class="fade" aria-hidden="true"></div>
-            </div>
-            <div class="label">
-              <h3>Video Edits</h3>
-              <span class="open">Open
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                  <path d="M7 17L17 7M7 7h10v10"/>
-                </svg>
-              </span>
-            </div>
-          </a>
-
-          <!-- Slightly right (pivot top-left) – Motion Graphics (Earf.gif) -->
-          <a class="card" href="motion-graphics.html" data-i="2" aria-label="Open Motion Graphics"
-             style="transform-origin: top left;">
-            <div class="media">
-              <img src="Earf.gif" alt="Motion graphics preview (Earf animation)">
-              <div class="fade" aria-hidden="true"></div>
-            </div>
-            <div class="label">
-              <h3>Motion Graphics</h3>
-              <span class="open">Open
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                  <path d="M7 17L17 7M7 7h10v10"/>
-                </svg>
-              </span>
-            </div>
-          </a>
-
-          <!-- Rightmost (pivot bottom-left) -->
-          <a class="card" href="art-direction.html" data-i="3" aria-label="Open Art Direction"
-             style="transform-origin: bottom left;">
-            <div class="media">
-              <img src="placeholder-4.jpg" alt="Art direction preview">
-              <div class="fade" aria-hidden="true"></div>
-            </div>
-            <div class="label">
-              <h3>Art Direction</h3>
-              <span class="open">Open
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                  <path d="M7 17L17 7M7 7h10v10"/>
-                </svg>
-              </span>
-            </div>
-          </a>
+  <main id="main">
+    <!-- HERO / ABOUT -->
+    <section id="about" class="container hero">
+      <div class="hero-grid">
+        <div class="frame reveal">
+          <img class="avatar" src="avatar.jpg" alt="Portrait of Shayan Hezarkhani">
+        </div>
+        <div>
+          <span class="tag">Motion Designer — Available for collaborations</span>
+          <h1>Hi, I’m Shayan Hezarkhani.</h1>
+          <p class="lead">
+            I’m a motion designer driven by storytelling and precision. My work spans explainer videos, product promos, music videos, and 2D/3D animation—often weaving in illustration and sound for a fuller, more cinematic feel. With roots in theatre and visual arts, I love turning complex ideas into simple, memorable motion systems and immersive scenes. I care about visuals that are minimal, refined, and built to connect.
+          </p>
+          <div class="socials">
+            <a class="icon-btn" href="mailto:shayminhez@gmail.com" aria-label="Email">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M4 7l8 5 8-5"></path><rect x="3" y="5" width="18" height="14" rx="2" ry="2"></rect></svg>
+            </a>
+            <a class="icon-btn" href="https://www.linkedin.com/in/shayan-hezarkhani/" target="_blank" rel="noopener" aria-label="LinkedIn">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M4.98 3.5C4.98 4.88 3.86 6 2.5 6S0 4.88 0 3.5 1.12 1 2.5 1s2.48 1.12 2.48 2.5zM0 24h5V7.98H0V24zM7.5 7.98V24h5v-8.17c0-4.37 5.5-4.72 5.5 0V24h5V13.5c0-8.09-8.76-7.79-10.5-3.81V7.98h-5z"></path></svg>
+            </a>
+            <a class="icon-btn" href="https://t.me/OneandenO" target="_blank" rel="noopener" aria-label="Telegram">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M9.04 15.52l-.38 5.33c.55 0 .8-.24 1.09-.53l2.62-2.51 5.43 3.98c.99.55 1.69.26 1.95-.92l3.54-16.63h.01c.31-1.45-.52-2.02-1.49-1.67l-20.76 8c-1.41.55-1.39 1.34-.24 1.7l5.31 1.66L19.4 6.32c.61-.41 1.17-.18.71.23"></path></svg>
+            </a>
+          </div>
         </div>
       </div>
     </section>
 
-    <div class="spacer"></div>
-  </div>
+    <!-- PORTFOLIO CATEGORIES -->
+    <section id="portfolio" class="container">
+      <h2 style="margin:0 0 1rem;">Portfolio Categories</h2>
+
+      <div class="row4">
+        <!-- Art Direction -->
+        <a class="card reveal" href="art-direction.html">
+          <div class="thumb" aria-hidden="true">
+            <img src="placeholder-4.jpg" alt="Art Direction preview image">
+          </div>
+          <div class="label">
+            <h3>Art Direction</h3>
+            <span class="arrow">↗</span>
+          </div>
+        </a>
+
+        <!-- Motion Graphics -->
+        <a class="card reveal" href="motion-graphics.html">
+          <div class="thumb" aria-hidden="true">
+            <img src="Earf.gif" alt="Motion Graphics preview animation">
+          </div>
+          <div class="label">
+            <h3>Motion Graphics</h3>
+            <span class="arrow">↗</span>
+          </div>
+        </a>
+
+        <!-- Video Edits -->
+        <a class="card reveal" href="video-edits.html">
+          <div class="thumb" aria-hidden="true">
+            <img src="placeholder-2.jpg" alt="Video Edits preview image">
+          </div>
+          <div class="label">
+            <h3>Video Edits</h3>
+            <span class="arrow">↗</span>
+          </div>
+        </a>
+
+        <!-- Graphic Design -->
+        <a class="card reveal" href="graphic-design.html">
+          <div class="thumb" aria-hidden="true">
+            <img src="placeholder-3.jpg" alt="Graphic Design preview image">
+          </div>
+          <div class="label">
+            <h3>Graphic Design</h3>
+            <span class="arrow">↗</span>
+          </div>
+        </a>
+      </div>
+    </section>
+
+    <!-- CONTACT (footer acts as contact section) -->
+    <section id="contact"></section>
+  </main>
+
+  <footer>
+    <div class="container footer-row">
+      <div>© <span id="year">2025</span> Shayan Hezarkhani</div>
+      <div style="display:flex; gap:.6rem;">
+        <a class="icon-btn" href="mailto:shayminhez@gmail.com" aria-label="Email">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M4 7l8 5 8-5"></path><rect x="3" y="5" width="18" height="14" rx="2" ry="2"></rect></svg>
+        </a>
+        <a class="icon-btn" href="https://www.linkedin.com/in/shayan-hezarkhani/" target="_blank" rel="noopener" aria-label="LinkedIn">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M4.98 3.5C4.98 4.88 3.86 6 2.5 6S0 4.88 0 3.5 1.12 1 2.5 1s2.48 1.12 2.48 2.5zM0 24h5V7.98H0V24zM7.5 7.98V24h5v-8.17c0-4.37 5.5-4.72 5.5 0V24h5V13.5c0-8.09-8.76-7.79-10.5-3.81V7.98h-5z"></path></svg>
+        </a>
+        <a class="icon-btn" href="https://t.me/OneandenO" target="_blank" rel="noopener" aria-label="Telegram">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M9.04 15.52l-.38 5.33c.55 0 .8-.24 1.09-.53l2.62-2.51 5.43 3.98c.99.55 1.69.26 1.95-.92l3.54-16.63h.01c.31-1.45-.52-2.02-1.49-1.67l-20.76 8c-1.41.55-1.39 1.34-.24 1.7l5.31 1.66L19.4 6.32c.61-.41 1.17-.18.71.23"></path></svg>
+        </a>
+      </div>
+    </div>
+  </footer>
 
   <script>
-    (function(){
-      const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-      const section = document.querySelector('.stack-section');
-      const stage   = document.getElementById('stage');
-      const cards   = Array.from(stage.querySelectorAll('.card'));
+    // year
+    document.getElementById('year').textContent = new Date().getFullYear();
 
-      // Initial "fan" angles (deg) and depth order. Negative = counter-clockwise.
-      const baseRot = [-10, -4, 5, 12];
+    // smooth scroll
+    if ('scrollBehavior' in document.documentElement.style) {
+      document.documentElement.style.scrollBehavior = 'smooth';
+    }
 
-      // X spread from center when fully opened (px)
-      const spread = 240;     // how far each step moves sideways at progress 1
-      const overlap = -80;    // initial horizontal overlap between neighbors (negative pulls inward)
-      const lift = -10;       // slight vertical offset to keep center aligned
-
-      // z-index base so center cards stack logically
-      cards.forEach((c, i) => c.style.zIndex = (100 + i).toString());
-
-      function clamp(v,min,max){ return Math.max(min, Math.min(max, v)); }
-      function lerp(a,b,t){ return a + (b - a) * t; }
-
-      function update(){
-        const rect = section.getBoundingClientRect();
-        const vh   = window.innerHeight;
-        const total = section.offsetHeight - vh;
-        const raw = 1 - (rect.bottom - vh) / (total || 1);
-        const t = clamp(raw, 0, 1);  // 0..1 scroll progress
-
-        // Center index (2 cards to the left, 2 to the right)
-        const center = (cards.length - 1)/2;
-
-        cards.forEach((card, i) => {
-          const dir = i - center; // -1.5, -0.5, 0.5, 1.5 for 4 cards
-          // X: start slightly overlapping; end pushed sideways
-          const x = lerp(dir * overlap, dir * spread, t);
-          // Y: tiny lift so they don't drift vertically
-          const y = lift;
-          // Rotation relaxes to near-straight
-          const r = lerp(baseRot[i] || 0, dir * 1.5, t); // leaves a hint of angle at end
-          // Scale: subtle growth on open
-          const s = lerp(0.98, 1.0, t);
-
-          card.style.transform = `translate(calc(-50% + ${x}px), calc(-50% + ${y}px)) rotate(${r}deg) scale(${s})`;
-        });
-
-        requestAnimationFrame(update);
-      }
-
-      if (!prefersReduced){
-        requestAnimationFrame(update);
-      }else{
-        // Reduced motion: calm, slightly separated state
-        const center = (cards.length - 1)/2;
-        cards.forEach((card, i) => {
-          const dir = i - center;
-          const x = dir * (spread * 0.6);
-          card.style.transform = `translate(calc(-50% + ${x}px), -50%) rotate(${dir * 1.5}deg) scale(1)`;
-        });
-      }
-
-      // Hover/focus bring-to-front behavior
-      cards.forEach((c,i)=>{
-        const base = 100 + i;
-        c.addEventListener('mouseenter', ()=> c.style.zIndex = '999');
-        c.addEventListener('mouseleave', ()=> c.style.zIndex = String(base));
-        c.addEventListener('focus',     ()=> c.style.zIndex = '999');
-        c.addEventListener('blur',      ()=> c.style.zIndex = String(base));
-      });
-    })();
+    // reveal on view
+    const io = new IntersectionObserver((entries)=>{
+      entries.forEach(e=>{
+        if(e.isIntersecting){ e.target.classList.add('reveal'); io.unobserve(e.target); }
+      })
+    }, {threshold:.2});
+    document.querySelectorAll('.reveal').forEach(el=>io.observe(el));
   </script>
 </body>
 </html>
