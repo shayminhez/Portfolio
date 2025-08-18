@@ -1,0 +1,87 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Video Edits — Shayan Hezarkhani</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+<style>
+  :root{--bg1:#0a1224;--bg2:#10204a;--glass:rgba(255,255,255,.06);--border:rgba(255,255,255,.12);--text:#e6e9f2;--muted:#a2a9c5;--accent:#66c2ff;--radius:16px;--shadow:0 8px 30px rgba(0,0,0,.35)}
+  *{box-sizing:border-box} body{margin:0;font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;color:var(--text);background:linear-gradient(120deg,var(--bg1),var(--bg2));background-size:200% 200%;animation:bg 18s ease-in-out infinite alternate}
+  @keyframes bg{from{background-position:0 0}to{background-position:100% 100%}}
+  a{color:var(--text);text-decoration:none;opacity:.9} a:hover{opacity:1}
+  header{position:sticky;top:0;z-index:10;backdrop-filter:blur(8px) saturate(130%);background:linear-gradient(180deg,rgba(10,18,36,.6),rgba(10,18,36,.25));border-bottom:1px solid var(--border)}
+  .container{width:min(1100px,92%);margin:0 auto}
+  .nav{display:flex;justify-content:space-between;align-items:center;padding:.9rem 0}
+  .grid{display:grid;grid-template-columns:repeat(2,1fr);gap:1rem;margin:1.2rem 0 2.5rem}
+  .cell{position:relative;overflow:hidden;border:1px solid var(--border);border-radius:var(--radius);background:var(--glass);box-shadow:var(--shadow);transition:transform .25s ease, filter .25s ease}
+  .cell img,.cell video{width:100%;height:100%;object-fit:cover;display:block;aspect-ratio:16/9}
+  .overlay{position:absolute;inset:0;background:linear-gradient(180deg, rgba(0,0,0,.0), rgba(0,0,0,.55));color:#fff;display:flex;flex-direction:column;justify-content:flex-end;padding:1rem;opacity:0;transition:opacity .25s ease}
+  .overlay h3{margin:0 0 .3rem;font-size:1rem}
+  .overlay p{margin:0;color:#d5d8e6;font-size:.92rem}
+  .grid.hovering .cell:not(.active){transform:scale(.98); filter:grayscale(.2) contrast(.95)}
+  .cell.active{transform:scale(1.02)}
+  .cell:hover .overlay{opacity:1}
+  footer{padding:2rem 0 3rem;color:var(--muted)}
+  .footer-row{display:flex;justify-content:space-between;align-items:center;border-top:1px solid var(--border);padding-top:1rem}
+  .icon-btn{width:42px;height:42px;display:grid;place-items:center;border-radius:12px;background:var(--glass);border:1px solid var(--border)}
+  @media (max-width:700px){.grid{grid-template-columns:1fr}}
+  @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important;scroll-behavior:auto!important}}
+</style>
+</head>
+<body>
+<header>
+  <div class="container nav">
+    <a href="index.html">← Back</a>
+    <strong>Video Edits</strong>
+    <nav><a href="index.html#portfolio">Portfolio</a></nav>
+  </div>
+</header>
+
+<main class="container">
+  <h1 style="margin:1rem 0 .4rem;font-size:1.6rem;">Video Edits</h1>
+  <p style="color:var(--muted);margin:0 0 1rem;">Replace placeholders with your thumbnails or embeds.</p>
+
+  <section class="grid" id="grid">
+    <!-- 10 placeholders -->
+    <figure class="cell"><img src="placeholder-1.jpg" alt="Video Edit 1"><figcaption class="overlay"><h3>Project 1</h3><p>Short description.</p></figcaption></figure>
+    <figure class="cell"><img src="placeholder-2.jpg" alt="Video Edit 2"><figcaption class="overlay"><h3>Project 2</h3><p>Short description.</p></figcaption></figure>
+    <figure class="cell"><img src="placeholder-3.jpg" alt="Video Edit 3"><figcaption class="overlay"><h3>Project 3</h3><p>Short description.</p></figcaption></figure>
+    <figure class="cell"><img src="placeholder-4.jpg" alt="Video Edit 4"><figcaption class="overlay"><h3>Project 4</h3><p>Short description.</p></figcaption></figure>
+    <figure class="cell"><img src="placeholder-5.jpg" alt="Video Edit 5"><figcaption class="overlay"><h3>Project 5</h3><p>Short description.</p></figcaption></figure>
+    <figure class="cell"><img src="placeholder-6.jpg" alt="Video Edit 6"><figcaption class="overlay"><h3>Project 6</h3><p>Short description.</p></figcaption></figure>
+    <figure class="cell"><img src="placeholder-7.jpg" alt="Video Edit 7"><figcaption class="overlay"><h3>Project 7</h3><p>Short description.</p></figcaption></figure>
+    <figure class="cell"><img src="placeholder-8.jpg" alt="Video Edit 8"><figcaption class="overlay"><h3>Project 8</h3><p>Short description.</p></figcaption></figure>
+    <figure class="cell"><img src="placeholder-9.jpg" alt="Video Edit 9"><figcaption class="overlay"><h3>Project 9</h3><p>Short description.</p></figcaption></figure>
+    <figure class="cell"><img src="placeholder-10.jpg" alt="Video Edit 10"><figcaption class="overlay"><h3>Project 10</h3><p>Short description.</p></figcaption></figure>
+  </section>
+</main>
+
+<footer>
+  <div class="container footer-row">
+    <div>© <span id="year"></span> Shayan Hezarkhani</div>
+    <div style="display:flex;gap:.6rem">
+      <a class="icon-btn" href="mailto:shayminhez@gmail.com" aria-label="Email"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M4 7l8 5 8-5"/><rect x="3" y="5" width="18" height="14" rx="2" ry="2"/></svg></a>
+      <a class="icon-btn" href="https://www.linkedin.com/in/shayan-hezarkhani/" target="_blank" rel="noopener" aria-label="LinkedIn"><svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M4.98 3.5C4.98 4.88 3.86 6 2.5 6S0 4.88 0 3.5 1.12 1 2.5 1s2.48 1.12 2.48 2.5zM0 24h5V7.98H0V24zM7.5 7.98V24h5v-8.17c0-4.37 5.5-4.72 5.5 0V24h5V13.5c0-8.09-8.76-7.79-10.5-3.81V7.98h-5z"/></svg></a>
+      <a class="icon-btn" href="https://t.me/OneandenO" target="_blank" rel="noopener" aria-label="Telegram"><svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M9.04 15.52l-.38 5.33c.55 0 .8-.24 1.09-.53l2.62-2.51 5.43 3.98c.99.55 1.69.26 1.95-.92l3.54-16.63h.01c.31-1.45-.52-2.02-1.49-1.67l-20.76 8c-1.41.55-1.39 1.34-.24 1.7l5.31 1.66L19.4 6.32c.61-.41 1.17-.18.71.23"/></svg></a>
+    </div>
+  </div>
+</footer>
+
+<script>
+  document.getElementById('year').textContent = new Date().getFullYear();
+  const grid = document.getElementById('grid');
+  const cells = Array.from(grid.querySelectorAll('.cell'));
+  cells.forEach(cell=>{
+    cell.addEventListener('mouseenter', ()=>{
+      grid.classList.add('hovering');
+      cells.forEach(c=>c.classList.remove('active'));
+      cell.classList.add('active');
+    });
+    cell.addEventListener('mouseleave', ()=>{
+      grid.classList.remove('hovering');
+      cell.classList.remove('active');
+    });
+  });
+</script>
+</body>
+</html>

@@ -1,0 +1,209 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Shayan Hezarkhani Portfolio</title>
+  <meta name="description" content="Portfolio of Shayan Hezarkhani — Art Direction, Motion Graphics, Video Edits, Graphic Design." />
+  <meta name="theme-color" content="#0a1224" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      --bg1:#0a1224;            /* dark navy */
+      --bg2:#10204a;            /* brighter navy */
+      --glass: rgba(255,255,255,.06);
+      --border: rgba(255,255,255,.12);
+      --text: #e6e9f2;
+      --muted:#a2a9c5;
+      --accent:#66c2ff;
+      --radius:16px;
+      --shadow:0 8px 30px rgba(0,0,0,.35);
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0; font-family:Inter, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif; color:var(--text);
+      background: linear-gradient(120deg, var(--bg1), var(--bg2));
+      background-size: 200% 200%;
+      animation: bgShift 18s ease-in-out infinite alternate;
+      line-height:1.55;
+    }
+    @keyframes bgShift{
+      from{ background-position: 0% 0%;}
+      to{ background-position: 100% 100%;}
+    }
+
+    a{color:var(--accent); text-decoration:none}
+    a:hover{text-decoration:underline}
+    img{max-width:100%; display:block}
+    .container{width:min(1100px,92%); margin:0 auto}
+
+    /* Header */
+    header{
+      position:sticky; top:0; z-index:1000;
+      backdrop-filter: blur(8px) saturate(130%);
+      background: linear-gradient(180deg, rgba(10,18,36,.6), rgba(10,18,36,.25));
+      border-bottom:1px solid var(--border);
+    }
+    .nav{display:flex; align-items:center; justify-content:space-between; gap:1rem; padding:.9rem 0}
+    .brand{font-weight:800; letter-spacing:.3px}
+    .brand a{color:var(--text); text-decoration:none}
+    .nav a{color:var(--text); opacity:.9}
+    .nav a:hover{opacity:1}
+    .nav-links{display:flex; gap:1rem}
+
+    /* Hero */
+    .hero{padding:4rem 0 3rem}
+    .hero-grid{display:grid; grid-template-columns: .9fr 1.1fr; gap:2rem; align-items:center}
+    .frame{
+      background: var(--glass); border:1px solid var(--border); border-radius: 28px;
+      box-shadow: var(--shadow); padding:.6rem; overflow:hidden;
+    }
+    .avatar{
+      aspect-ratio: 4/5; object-fit: cover; width:100%;
+      border-radius: 22px;
+    }
+    .tag{display:inline-block; padding:.35rem .65rem; border:1px solid var(--border); border-radius:999px; color:var(--muted); font-size:.9rem}
+    h1{margin:.6rem 0 1rem; font-size:clamp(1.8rem, 4vw, 2.6rem)}
+    .lead{color:var(--muted); font-size:clamp(1rem, 2.3vw, 1.12rem)}
+    .socials{display:flex; gap:.6rem; margin-top:1rem}
+    .icon-btn{
+      width:42px; height:42px; display:grid; place-items:center; border-radius:12px;
+      background:var(--glass); border:1px solid var(--border);
+    }
+
+    /* Portfolio row */
+    section{padding:2.5rem 0}
+    .row4{display:grid; grid-template-columns: repeat(4, 1fr); gap:1rem}
+    .card{
+      background:linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.02));
+      border:1px solid var(--border); border-radius:var(--radius); padding:1rem; min-height:140px;
+      display:flex; align-items:end; justify-content:space-between; overflow:hidden; position:relative;
+      box-shadow: var(--shadow);
+      transform: translateY(8px); opacity:0; transition:transform .6s ease, opacity .6s ease, scale .25s ease;
+    }
+    .card.reveal{transform:none; opacity:1}
+    .card h3{margin:0; font-size:1.1rem}
+    .card .arrow{font-size:1.4rem; opacity:.7}
+    .card:hover{scale:1.02}
+
+    /* Footer */
+    footer{padding:2.5rem 0 3.5rem; color:var(--muted)}
+    .footer-row{display:flex; justify-content:space-between; align-items:center; gap:1rem; border-top:1px solid var(--border); padding-top:1rem}
+
+    /* Responsive */
+    @media (max-width: 980px){ .hero-grid{grid-template-columns:1fr} }
+    @media (max-width: 900px){ .row4{grid-template-columns: repeat(2, 1fr);} }
+    @media (max-width: 560px){ .row4{grid-template-columns: 1fr;} }
+
+    @media (prefers-reduced-motion: reduce){
+      *{animation:none!important; transition:none!important; scroll-behavior:auto!important}
+    }
+  </style>
+</head>
+<body>
+  <a class="skip" href="#main" style="position:absolute;left:-9999px;top:auto;width:1px;height:1px;overflow:hidden;">Skip to content</a>
+
+  <header>
+    <div class="container nav">
+      <div class="brand"><a href="index.html">Shayan Hezarkhani Portfolio</a></div>
+      <nav class="nav-links" aria-label="Primary">
+        <a href="#about">About Me</a>
+        <a href="#portfolio">Portfolio</a>
+        <a href="#contact">Contact</a>
+      </nav>
+    </div>
+  </header>
+
+  <main id="main">
+    <!-- HERO / ABOUT -->
+    <section id="about" class="container">
+      <div class="hero-grid">
+        <div class="frame reveal">
+          <!-- Replace with your real file name, e.g. avatar.jpg -->
+          <img class="avatar" src="avatar.jpg" alt="Portrait of Shayan Hezarkhani" />
+        </div>
+        <div>
+          <span class="tag">Motion Designer — Available for collaborations</span>
+          <h1>Hi, I’m Shayan Hezarkhani.</h1>
+          <p class="lead">
+            I’m a motion designer driven by storytelling and precision. My work spans explainer videos, product promos, music videos, and 2D/3D animation—often weaving in illustration and sound for a fuller, more cinematic feel. With roots in theatre and visual arts, I love turning complex ideas into simple, memorable motion systems and immersive scenes. I care about visuals that are minimal, refined, and built to connect.
+          </p>
+          <div class="socials">
+            <a class="icon-btn" href="mailto:shayminhez@gmail.com" aria-label="Email">
+              <!-- email icon -->
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M4 7l8 5 8-5"/><rect x="3" y="5" width="18" height="14" rx="2" ry="2"/></svg>
+            </a>
+            <a class="icon-btn" href="https://www.linkedin.com/in/shayan-hezarkhani/" target="_blank" rel="noopener" aria-label="LinkedIn">
+              <!-- linkedin icon -->
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M4.98 3.5C4.98 4.88 3.86 6 2.5 6S0 4.88 0 3.5 1.12 1 2.5 1s2.48 1.12 2.48 2.5zM0 24h5V7.98H0V24zM7.5 7.98V24h5v-8.17c0-4.37 5.5-4.72 5.5 0V24h5V13.5c0-8.09-8.76-7.79-10.5-3.81V7.98h-5z"/></svg>
+            </a>
+            <a class="icon-btn" href="https://t.me/OneandenO" target="_blank" rel="noopener" aria-label="Telegram">
+              <!-- telegram icon -->
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M9.04 15.52l-.38 5.33c.55 0 .8-.24 1.09-.53l2.62-2.51 5.43 3.98c.99.55 1.69.26 1.95-.92l3.54-16.63h.01c.31-1.45-.52-2.02-1.49-1.67l-20.76 8c-1.41.55-1.39 1.34-.24 1.7l5.31 1.66L19.4 6.32c.61-.41 1.17-.18.71.23"/></svg>
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- PORTFOLIO -->
+    <section id="portfolio" class="container">
+      <h2 style="margin:0 0 1rem;">Selected Work</h2>
+      <div class="row4">
+        <a class="card reveal" href="art-direction.html">
+          <h3>Art Direction</h3><span class="arrow">↗</span>
+        </a>
+        <a class="card reveal" href="motion-graphics.html">
+          <h3>Motion Graphics</h3><span class="arrow">↗</span>
+        </a>
+        <a class="card reveal" href="video-edits.html">
+          <h3>Video Edits</h3><span class="arrow">↗</span>
+        </a>
+        <a class="card reveal" href="graphic-design.html">
+          <h3>Graphic Design</h3><span class="arrow">↗</span>
+        </a>
+      </div>
+    </section>
+
+    <!-- CONTACT (footer acts as contact section) -->
+    <section id="contact"></section>
+  </main>
+
+  <footer>
+    <div class="container footer-row">
+      <div>© <span id="year"></span> Shayan Hezarkhani</div>
+      <div style="display:flex; gap:.6rem;">
+        <a class="icon-btn" href="mailto:shayminhez@gmail.com" aria-label="Email">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M4 7l8 5 8-5"/><rect x="3" y="5" width="18" height="14" rx="2" ry="2"/></svg>
+        </a>
+        <a class="icon-btn" href="https://www.linkedin.com/in/shayan-hezarkhani/" target="_blank" rel="noopener" aria-label="LinkedIn">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M4.98 3.5C4.98 4.88 3.86 6 2.5 6S0 4.88 0 3.5 1.12 1 2.5 1s2.48 1.12 2.48 2.5zM0 24h5V7.98H0V24zM7.5 7.98V24h5v-8.17c0-4.37 5.5-4.72 5.5 0V24h5V13.5c0-8.09-8.76-7.79-10.5-3.81V7.98h-5z"/></svg>
+        </a>
+        <a class="icon-btn" href="https://t.me/OneandenO" target="_blank" rel="noopener" aria-label="Telegram">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M9.04 15.52l-.38 5.33c.55 0 .8-.24 1.09-.53l2.62-2.51 5.43 3.98c.99.55 1.69.26 1.95-.92l3.54-16.63h.01c.31-1.45-.52-2.02-1.49-1.67l-20.76 8c-1.41.55-1.39 1.34-.24 1.7l5.31 1.66L19.4 6.32c.61-.41 1.17-.18.71.23"/></svg>
+        </a>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // year
+    document.getElementById('year').textContent = new Date().getFullYear();
+
+    // smooth scroll
+    if ('scrollBehavior' in document.documentElement.style) {
+      document.documentElement.style.scrollBehavior = 'smooth';
+    }
+
+    // scroll reveal
+    const io = new IntersectionObserver((entries)=>{
+      entries.forEach(e=>{
+        if(e.isIntersecting){ e.target.classList.add('reveal'); io.unobserve(e.target); }
+      })
+    }, {threshold:.2});
+    document.querySelectorAll('.reveal').forEach(el=>io.observe(el));
+  </script>
+</body>
+</html>
