@@ -13,10 +13,9 @@
   --text:#e6e9f2; --muted:#a2a9c5; --accent:#8fd0ff; --r:16px; --shadow:0 8px 30px rgba(0,0,0,.35);
 
   /* interactions */
-  --thumb-open:260px;                          /* preview height */
+  --thumb-open:260px;                          /* preview height on open */
   --anim:.70s cubic-bezier(.22,.9,.2,1);       /* slow, buttery */
-  --float:6s;                                  /* idle wiggle speed */
-  --tilt:6deg;                                 /* max tilt */
+  --tilt:6deg;                                 /* hover micro-tilt */
   --lift-scale:1.03;
   --lift-shift:-6px;                           /* negative = up */
 }
@@ -27,7 +26,6 @@ body{
   margin:0; font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif; color:var(--text);
   background:linear-gradient(120deg,var(--bg1),var(--bg2)); background-size:200% 200%;
   animation:bgShift 18s ease-in-out infinite alternate;
-  /* custom cursor */
   cursor:url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18"><circle cx="9" cy="9" r="4" fill="%23a9d8ff"/></svg>') 9 9, default;
 }
 @keyframes bgShift{from{background-position:0 0}to{background-position:100% 100%}}
@@ -46,7 +44,7 @@ img{max-width:100%; display:block}
   backdrop-filter:blur(8px) saturate(125%);
   position:relative; overflow:hidden;
 }
-.glass::after{ /* subtle grain to reduce banding */
+.glass::after{
   content:""; position:absolute; inset:0; pointer-events:none; opacity:.06; mix-blend-mode:overlay;
   background-image:url('data:image/svg+xml;utf8,\
   <svg xmlns="http://www.w3.org/2000/svg" width="64" height="64">\
@@ -70,8 +68,8 @@ header{position:sticky; top:0; z-index:1000; backdrop-filter:blur(8px) saturate(
 .hero{padding:3.2rem 0 2.2rem}
 .hero-grid{display:grid; grid-template-columns:.8fr 1.2fr; gap:2rem; align-items:center}
 .frame{padding:.6rem}
-.avatar{aspect-ratio:4/5; object-fit:cover; width:100%; border-radius:22px}
 .frame.glass{max-width:420px}
+.avatar{aspect-ratio:4/5; object-fit:cover; width:100%; border-radius:22px}
 .tag{display:inline-block; padding:.35rem .65rem; border:1px solid var(--border); border-radius:999px; color:var(--muted); font-size:.9rem}
 h1{margin:.6rem 0 1rem; font-size:clamp(1.8rem,4vw,2.6rem)}
 .lead{color:var(--muted); font-size:clamp(1rem,2.3vw,1.12rem)}
@@ -86,13 +84,11 @@ section{padding:2.2rem 0}
 .particles{position:absolute; inset:0; z-index:0; pointer-events:none; opacity:.35}
 .row4{display:grid; grid-template-columns:repeat(4,1fr); gap:1rem; position:relative; z-index:1}
 
-/* Card wrapper (anchor) */
+/* Card */
 .card{position:relative; text-decoration:none; cursor:url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18"><circle cx="9" cy="9" r="4" fill="%23a9d8ff"/></svg>') 9 9, pointer}
-.card .tilt{display:flex; flex-direction:column; transform-style:preserve-3d; will-change:transform;
+.tilt{display:flex; flex-direction:column; transform-style:preserve-3d; will-change:transform;
   transition:transform var(--anim), filter .25s ease, box-shadow .25s ease}
-.card .tilt.glass{overflow:visible}
-
-/* sheen */
+.tilt.glass{overflow:visible}
 .tilt::before{
   content:""; position:absolute; inset:0; mix-blend-mode:screen; opacity:.22; pointer-events:none;
   background:linear-gradient(to bottom, rgba(255,255,255,.28), rgba(255,255,255,0) 32%), radial-gradient(140% 60% at 120% -20%, rgba(102,194,255,.20) 0%, rgba(102,194,255,0) 60%);
@@ -100,16 +96,17 @@ section{padding:2.2rem 0}
 }
 .card:hover .tilt::before{opacity:.34}
 
-/* thumb (TOP area, opens downward toward label) */
+/* thumb (true height animation: idle = 0) */
 .thumb{
   width:100%;
-  height:var(--thumb-open);             /* fixed drawing area */
-  clip-path:inset(0 0 100% 0 round var(--r) var(--r) 0 0); /* HIDDEN: bottom = 100% */
-  transition:clip-path var(--anim);
-  position:relative; background:none; overflow:hidden;
+  max-height:0;           /* KEY: no reserved space in idle */
+  overflow:hidden;
+  opacity:0;
+  transition:max-height var(--anim), opacity var(--anim);
+  position:relative; background:none;
 }
 .thumb img{
-  width:100%; height:100%; object-fit:cover;
+  width:100%; height:auto; display:block; object-fit:cover;
   transform:translateY(8px) scale(1.01);
   transition:transform .85s cubic-bezier(.16,.84,.24,1), filter .3s ease;
   filter:saturate(1.04);
@@ -122,7 +119,8 @@ section{padding:2.2rem 0}
   padding:.9rem 1rem;
   background:linear-gradient(180deg, rgba(15,25,50,.22), rgba(15,25,50,.10));
   border-top:1px solid rgba(255,255,255,.08);
-  position:relative; overflow:hidden; border-radius:0 0 var(--r) var(--r);
+  border-radius:0 0 var(--r) var(--r);
+  position:relative; overflow:hidden;
 }
 .label h3{margin:0; font-size:1.06rem; color:var(--accent)}
 .arrow{font-size:1.2rem; opacity:.78; transition:transform .22s ease}
@@ -135,17 +133,17 @@ section{padding:2.2rem 0}
 .card:hover .label::after{opacity:.7; animation:sheen .9s ease}
 @keyframes sheen{from{transform:translateX(-120%) rotate(20deg)}to{transform:translateX(220%) rotate(20deg)}}
 
-/* OUTER depth shadow (no inner shadow on preview) */
+/* OUTER depth shadow only (no inner shadow under GIF) */
 .drop{position:absolute; left:10px; right:10px; bottom:6px; height:14px; border-radius:999px;
   background:radial-gradient(60% 80% at 50% 50%, rgba(0,0,0,.45), transparent 70%);
   opacity:0; filter:blur(2px); transform:scale(.9);
   transition:opacity var(--anim), transform var(--anim);
 }
 
-/* hover open + lift */
+/* open + lift */
 .card:hover .thumb,
 .card.open .thumb,
-.card:focus-within .thumb{clip-path:inset(0 0 0 0 round var(--r) var(--r) 0 0)}
+.card:focus-within .thumb{max-height:var(--thumb-open); opacity:1}
 .card:hover .thumb img,
 .card.open .thumb img,
 .card:focus-within .thumb img{transform:translateY(0) scale(1.03)}
@@ -159,19 +157,38 @@ section{padding:2.2rem 0}
 .row4 .card:nth-child(3) .thumb{transition-delay:120ms}
 .row4 .card:nth-child(4) .thumb{transition-delay:180ms}
 
-/* ---------- Toolbox (#17) ---------- */
+/* ---------- Toolbox ---------- */
 .tools-grid{display:grid; grid-template-columns:repeat(6,1fr); gap:12px}
 .tool{display:flex; align-items:center; gap:10px; padding:12px 14px; border-radius:14px; border:1px solid var(--border); background:rgba(255,255,255,.06)}
 .tool i{width:24px; height:24px; display:inline-block; border-radius:6px; background:linear-gradient(180deg,#8fd0ff,#3c6ea6)}
 .tool span{font-size:.95rem}
 
-/* ---------- Recommendations (capsules) ---------- */
-.recos{display:grid; grid-template-columns:repeat(3,1fr); gap:16px}
+/* ---------- Recommendations: Carousel ---------- */
+.recos-wrap{position:relative}
+.carousel{
+  display:flex; gap:16px; overflow-x:auto; scroll-snap-type:x mandatory;
+  -webkit-overflow-scrolling:touch; padding-bottom:6px;
+}
+.carousel::-webkit-scrollbar{height:8px}
+.carousel::-webkit-scrollbar-thumb{background:rgba(255,255,255,.12); border-radius:999px}
+.slide{
+  flex:0 0 clamp(280px, 42%, 420px);
+  scroll-snap-align:center;
+}
 .capsule{border-radius:999px; padding:18px 22px; border:1px solid var(--border); position:relative; overflow:hidden}
 .capsule.glass{background:linear-gradient(180deg, rgba(255,255,255,.10), rgba(255,255,255,.02))}
 .quote{font-size:1rem; line-height:1.5}
 .person{display:flex; align-items:center; gap:10px; margin-top:10px; color:#cfe7ff; font-size:.92rem}
 .person .avatar{width:28px; height:28px; border-radius:50%; object-fit:cover}
+
+/* carousel controls */
+.car-ctrl{
+  position:absolute; top:50%; transform:translateY(-50%); z-index:2;
+  width:40px; height:40px; border-radius:999px; display:grid; place-items:center;
+  border:1px solid var(--border); background:rgba(10,18,36,.6); backdrop-filter:blur(8px); color:#cfe7ff;
+}
+.car-ctrl:hover{background:rgba(10,18,36,.75)}
+#prev{left:-8px} #next{right:-8px}
 
 /* Footer */
 footer{padding:2.5rem 0 3.5rem; color:var(--muted)}
@@ -179,12 +196,12 @@ footer{padding:2.5rem 0 3.5rem; color:var(--muted)}
 
 /* Responsive */
 @media (max-width:980px){ .hero-grid{grid-template-columns:1fr} .frame.glass{max-width:520px} }
-@media (max-width:900px){ .row4{grid-template-columns:repeat(2,1fr)} .tools-grid{grid-template-columns:repeat(3,1fr)} .recos{grid-template-columns:1fr} }
+@media (max-width:900px){ .row4{grid-template-columns:repeat(2,1fr)} .tools-grid{grid-template-columns:repeat(3,1fr)} }
 @media (max-width:560px){ .row4{grid-template-columns:1fr} .tools-grid{grid-template-columns:repeat(2,1fr)} }
 
 @media (prefers-reduced-motion:reduce){
   *{animation:none!important; transition:.01ms!important; scroll-behavior:auto!important}
-  .thumb{clip-path:inset(0 0 0 0 round var(--r) var(--r) 0 0)!important}
+  .thumb{max-height:0!important; opacity:1!important}
 }
 </style>
 </head>
@@ -208,7 +225,7 @@ footer{padding:2.5rem 0 3.5rem; color:var(--muted)}
   <!-- HERO -->
   <section id="about" class="container hero">
     <div class="hero-grid">
-      <div class="frame glass reveal"><img class="avatar" src="avatar.jpg" alt="Portrait of Shayan Hezarkhani" loading="eager" decoding="async"></div>
+      <div class="frame glass"><img class="avatar" src="avatar.jpg" alt="Portrait of Shayan Hezarkhani" loading="eager" decoding="async"></div>
       <div>
         <span class="tag">Motion Designer — Available for collaborations</span>
         <h1>Hi, I’m Shayan Hezarkhani.</h1>
@@ -300,21 +317,37 @@ footer{padding:2.5rem 0 3.5rem; color:var(--muted)}
     </div>
   </section>
 
-  <!-- RECOMMENDATIONS -->
+  <!-- RECOMMENDATIONS (Carousel) -->
   <section id="recs" class="container">
     <h2 style="margin:0 0 1rem;">Recommendations</h2>
-    <div class="recos">
-      <div class="capsule glass">
-        <div class="quote">“Shayan turns complex briefs into clean, compelling motion—always on schedule and with great communication.”</div>
-        <div class="person"><img class="avatar" src="avatar.jpg" alt="" loading="lazy" decoding="async"><span>Alex M., Creative Director at Arc Studio</span></div>
-      </div>
-      <div class="capsule glass">
-        <div class="quote">“He’s a detail-obsessed editor with strong taste. Our clients ask for him by name.”</div>
-        <div class="person"><img class="avatar" src="avatar.jpg" alt="" loading="lazy" decoding="async"><span>Priya S., Producer at Northwave</span></div>
-      </div>
-      <div class="capsule glass">
-        <div class="quote">“Fast iterations, thoughtful typography, and beautiful transitions—Shayan elevates every project he touches.”</div>
-        <div class="person"><img class="avatar" src="avatar.jpg" alt="" loading="lazy" decoding="async"><span>Jon R., Design Lead at Beacon</span></div>
+    <div class="recos-wrap">
+      <button class="car-ctrl" id="prev" aria-label="Previous">‹</button>
+      <button class="car-ctrl" id="next" aria-label="Next">›</button>
+      <div class="carousel" id="carousel">
+        <div class="slide">
+          <div class="capsule glass">
+            <div class="quote">“Shayan turns complex briefs into clean, compelling motion—always on schedule and with great communication.”</div>
+            <div class="person"><img class="avatar" src="avatar.jpg" alt="" loading="lazy" decoding="async"><span>Alex M., Creative Director at Arc Studio</span></div>
+          </div>
+        </div>
+        <div class="slide">
+          <div class="capsule glass">
+            <div class="quote">“He’s a detail-obsessed editor with strong taste. Our clients ask for him by name.”</div>
+            <div class="person"><img class="avatar" src="avatar.jpg" alt="" loading="lazy" decoding="async"><span>Priya S., Producer at Northwave</span></div>
+          </div>
+        </div>
+        <div class="slide">
+          <div class="capsule glass">
+            <div class="quote">“Fast iterations, thoughtful typography, and beautiful transitions—Shayan elevates every project he touches.”</div>
+            <div class="person"><img class="avatar" src="avatar.jpg" alt="" loading="lazy" decoding="async"><span>Jon R., Design Lead at Beacon</span></div>
+          </div>
+        </div>
+        <div class="slide">
+          <div class="capsule glass">
+            <div class="quote">“Collaborative, reliable, and inventive—he brings calm energy to fast-paced edits.”</div>
+            <div class="person"><img class="avatar" src="avatar.jpg" alt="" loading="lazy" decoding="async"><span>Sara K., Senior Producer at Drift</span></div>
+          </div>
+        </div>
       </div>
     </div>
   </section>
@@ -350,7 +383,7 @@ footer{padding:2.5rem 0 3.5rem; color:var(--muted)}
 // year
 document.getElementById('year').textContent = new Date().getFullYear();
 
-/* Micro tilt + mobile tap-open */
+/* Micro tilt + parallax follow + mobile tap-open */
 document.querySelectorAll('.card').forEach(card=>{
   const tilt  = card.querySelector('.tilt');
   const para  = card.querySelector('.thumb .parallax');
@@ -367,49 +400,56 @@ document.querySelectorAll('.card').forEach(card=>{
   card.addEventListener('mouseleave', ()=>{ tilt.style.transform=''; if(para) para.style.transform=''; });
 
   // mobile: first tap opens, second navigates
-  let openedOnce=false;
+  let opened=false;
   card.addEventListener('click', (e)=>{
-    if (matchMedia('(hover: none)').matches && !openedOnce){
+    if (matchMedia('(hover: none)').matches && !opened){
       e.preventDefault();
       card.classList.add('open');
-      openedOnce=true;
-      setTimeout(()=>openedOnce=false, 1200);
+      opened=true;
+      setTimeout(()=>opened=false, 1000);
     }
   });
 });
 
 /* Particle canvas (parallax) */
 const canvas=document.getElementById('particles'); const ctx=canvas.getContext('2d',{alpha:true});
-function resize(){ const dpr=window.devicePixelRatio||1; const rect=canvas.getBoundingClientRect(); canvas.width=rect.width*dpr; canvas.height=rect.height*dpr; ctx.setTransform(dpr,0,0,dpr,0,0); }
-let dots=[]; function initDots(){
-  const w=canvas.width, h=canvas.height; dots = [];
+function sizeCanvas(){
+  const rect=canvas.getBoundingClientRect(), dpr=window.devicePixelRatio||1;
+  canvas.width=rect.width*dpr; canvas.height=rect.height*dpr; ctx.setTransform(dpr,0,0,dpr,0,0);
+}
+let dots=[];
+function initDots(){
+  const w=canvas.width, h=canvas.height; dots=[];
   const count=Math.round((w*h)/50000);
   for(let i=0;i<count;i++){
-    dots.push({x:Math.random()*w, y:Math.random()*h, r:Math.random()*1.6+0.4, a:Math.random()*0.5+0.2});
+    dots.push({x:Math.random()*w/dpr, y:Math.random()*h/dpr, r:Math.random()*1.6+0.4, a:Math.random()*0.5+0.2});
   }
 }
-let px=0,py=0;
+let dpr=window.devicePixelRatio||1, px=0,py=0;
 function draw(){
-  ctx.clearRect(0,0,canvas.width,canvas.height);
+  ctx.clearRect(0,0,canvas.width,dpr?canvas.height:canvas.height);
   ctx.fillStyle='#fff';
-  dots.forEach(d=>{
-    ctx.globalAlpha=d.a;
-    ctx.beginPath(); ctx.arc(d.x+px, d.y+py, d.r, 0, Math.PI*2); ctx.fill();
-  });
+  dots.forEach(d=>{ ctx.globalAlpha=d.a; ctx.beginPath(); ctx.arc(d.x+px, d.y+py, d.r, 0, Math.PI*2); ctx.fill(); });
   requestAnimationFrame(draw);
 }
 function onMove(e){
   const rect=canvas.getBoundingClientRect();
-  const cx = (e.clientX-rect.left)/rect.width-.5;
-  const cy = (e.clientY-rect.top)/rect.height-.5;
-  px = -cx*6; py = -cy*6;
+  const cx=(e.clientX-rect.left)/rect.width-.5, cy=(e.clientY-rect.top)/rect.height-.5;
+  px=-cx*6; py=-cy*6;
 }
 if (matchMedia('(prefers-reduced-motion: no-preference)').matches){
-  const obs=new ResizeObserver(()=>{resize(); initDots();});
-  obs.observe(document.querySelector('.categories'));
+  const host=document.querySelector('.categories');
+  const ro=new ResizeObserver(()=>{ sizeCanvas(); initDots(); });
+  ro.observe(host);
   draw();
   window.addEventListener('mousemove', onMove);
 }
+
+/* Recommendations carousel controls */
+const track=document.getElementById('carousel');
+document.getElementById('prev').addEventListener('click', ()=> track.scrollBy({left:-track.clientWidth*0.8, behavior:'smooth'}));
+document.getElementById('next').addEventListener('click', ()=> track.scrollBy({left:+track.clientWidth*0.8, behavior:'smooth'}));
+
 </script>
 </body>
 </html>
