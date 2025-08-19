@@ -23,9 +23,9 @@
       --shadow:0 8px 30px rgba(0,0,0,.35);
 
       /* Card preview knobs */
-      --thumb-open: 220px;      /* max visible preview on hover */
-      --thumb-radius: 14px;
-      --anim: .3s cubic-bezier(.2,.6,.2,1);
+      --thumb-open: 220px;                 /* visible preview on hover */
+      --card-min: 96px;                    /* tighter idle height */
+      --anim: .36s cubic-bezier(.16,.84,.24,1); /* eased-out slide */
     }
     *{box-sizing:border-box}
     html,body{height:100%}
@@ -92,30 +92,53 @@
       gap:1rem;
     }
 
-    /* Hover-to-open card */
+    /* Hover-to-open card (glossier) */
     .card{
       position:relative;
       display:flex;
       flex-direction:column;
-      justify-content:flex-end; /* keep label pinned to bottom */
-      background:linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.02));
+      justify-content:flex-end;                /* keep label pinned to bottom */
+      background:
+        radial-gradient(80% 120% at 20% -30%, rgba(255,255,255,.08) 0%, rgba(255,255,255,0) 60%),
+        linear-gradient(180deg, rgba(255,255,255,.08), rgba(255,255,255,.02));
       border:1px solid var(--border);
       border-radius:var(--radius);
       overflow:hidden;
-      min-height:160px;                 /* compact at rest */
-      box-shadow: var(--shadow);
-      transform: translateY(8px);
+      min-height:var(--card-min);              /* tighter idle */
+      box-shadow:
+        0 1px 0 rgba(255,255,255,.06) inset,   /* inner border */
+        0 0 0 1px rgba(255,255,255,.06),       /* hairline outside */
+        var(--shadow);
       opacity:0;
-      transition: transform .6s ease, opacity .6s ease;
-      will-change: transform;
+      transform: translateY(8px);
+      transition: transform .6s ease, opacity .6s ease, box-shadow .25s ease, filter .25s ease;
       text-decoration:none;
+      backdrop-filter: blur(6px) saturate(120%);
+    }
+    /* glossy highlight */
+    .card::before{
+      content:"";
+      position:absolute; inset:0;
+      background: linear-gradient( to bottom, rgba(255,255,255,.14), rgba(255,255,255,0) 28%);
+      mix-blend-mode:screen;
+      opacity:.22;
+      pointer-events:none;
+      transition: opacity .25s ease;
     }
     .card.reveal{transform:none; opacity:1}
+    .card:hover{
+      box-shadow:
+        0 1px 0 rgba(255,255,255,.10) inset,
+        0 0 0 1px rgba(255,255,255,.10),
+        0 16px 60px rgba(0,0,0,.55);
+      filter:saturate(1.03);
+    }
+    .card:hover::before{opacity:.3}
 
     /* The preview area that opens */
     .thumb{
       width:100%;
-      max-height:0;                     /* collapsed */
+      max-height:0;                           /* collapsed */
       overflow:hidden;
       opacity:.0;
       transition: max-height var(--anim), opacity var(--anim);
@@ -129,27 +152,33 @@
       object-fit:cover;
       border-top-left-radius:calc(var(--radius) - 2px);
       border-top-right-radius:calc(var(--radius) - 2px);
+      transform: translateY(6px);
+      transition: transform var(--anim), filter var(--anim);
+      filter: saturate(1.02);
     }
 
     /* Bottom label stays fixed */
     .label{
       display:flex; align-items:center; justify-content:space-between; gap:.8rem;
-      padding:1rem;
+      padding:.9rem 1rem;
+      background: linear-gradient(180deg, rgba(15,25,50,.22), rgba(15,25,50,.10));
+      border-top: 1px solid rgba(255,255,255,.06);
+      backdrop-filter: blur(6px) saturate(120%);
     }
-    .label h3{margin:0; font-size:1.1rem; color:#8fd0ff}
-    .arrow{font-size:1.2rem; opacity:.75}
+    .label h3{margin:0; font-size:1.06rem; color:#8fd0ff}
+    .arrow{font-size:1.2rem; opacity:.75; transition:transform .22s ease}
 
-    /* Hover/focus opens preview upward (and a bit downward by growing the card) */
+    /* Hover/focus opens preview (ease-out), image slides up a touch */
     .card:hover .thumb,
     .card:focus-within .thumb{
       max-height:var(--thumb-open);
       opacity:1;
     }
-
-    /* Gentle grow on hover for the whole card */
-    .card:hover{outline:none}
+    .card:hover .thumb img,
+    .card:focus-within .thumb img{
+      transform: translateY(0);
+    }
     .card:hover .label .arrow{transform:translateX(1px)}
-    .label .arrow{transition:transform var(--anim)}
 
     /* Footer */
     footer{padding:2.5rem 0 3.5rem; color:var(--muted)}
@@ -162,7 +191,7 @@
 
     @media (prefers-reduced-motion: reduce){
       *{animation:none!important; transition:none!important; scroll-behavior:auto!important}
-      .thumb{max-height:0!important; opacity:1!important} /* just snap open/closed via focus if needed */
+      .thumb{max-height:0!important; opacity:1!important}
     }
   </style>
 </head>
