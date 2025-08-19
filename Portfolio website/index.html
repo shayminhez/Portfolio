@@ -12,11 +12,13 @@
   --bg1:#0a1224; --bg2:#10204a; --glass:rgba(255,255,255,.06); --border:rgba(255,255,255,.12);
   --text:#e6e9f2; --muted:#a2a9c5; --accent:#66c2ff; --r:16px; --shadow:0 8px 30px rgba(0,0,0,.35);
 
-  /* Interaction knobs */
-  --thumb-open:260px;                             /* preview height */
-  --anim:.70s cubic-bezier(.22,.9,.2,1);         /* slow buttery ease-out */
-  --float:10s;                                     /* idle wiggle speed */
-  --tilt:16deg;                                    /* max tilt */
+  /* interactions */
+  --thumb-open:260px;                          /* preview height */
+  --anim:.70s cubic-bezier(.22,.9,.2,1);       /* slow, buttery */
+  --float:6s;                                  /* idle wiggle speed */
+  --tilt:6deg;                                 /* max tilt */
+  --lift-scale:1.03;
+  --lift-shift:-6px;                           /* negative = up */
 }
 
 *{box-sizing:border-box}
@@ -33,9 +35,28 @@ a{color:var(--accent); text-decoration:none}
 img{max-width:100%; display:block}
 .container{width:min(1100px,92%); margin:0 auto}
 
+/* ---------- Shared glass aesthetic ---------- */
+.glass{
+  background:
+    radial-gradient(110% 160% at 20% -40%, rgba(255,255,255,.10) 0%, rgba(255,255,255,0) 60%),
+    linear-gradient(180deg, rgba(255,255,255,.10), rgba(255,255,255,.02) 70%, rgba(0,0,0,.10));
+  border:1px solid var(--border);
+  border-radius:var(--r);
+  box-shadow:0 1px 0 rgba(255,255,255,.10) inset, 0 0 0 1px rgba(134,189,255,.08), var(--shadow);
+  backdrop-filter:blur(8px) saturate(125%);
+  position:relative; overflow:hidden;
+}
+.glass::after{ /* subtle grain to reduce banding */
+  content:""; position:absolute; inset:0; pointer-events:none; opacity:.06; mix-blend-mode:overlay;
+  background-image:url('data:image/svg+xml;utf8,\
+  <svg xmlns="http://www.w3.org/2000/svg" width="64" height="64">\
+  <filter id="n"><feTurbulence type="fractalNoise" baseFrequency="0.8" numOctaves="2" stitchTiles="stitch"/></filter>\
+  <rect width="64" height="64" filter="url(%23n)" opacity=".35"/></svg>');
+}
+
 /* Header */
 header{position:sticky; top:0; z-index:1000; backdrop-filter:blur(8px) saturate(130%);
-  background:linear-gradient(180deg,rgba(10,18,36,.6),rgba(10,18,36,.25));
+  background:linear-gradient(180deg, rgba(10,18,36,.6), rgba(10,18,36,.25));
   border-bottom:1px solid var(--border);
 }
 .nav{display:flex; align-items:center; justify-content:space-between; gap:1rem; padding:.9rem 0}
@@ -46,10 +67,11 @@ header{position:sticky; top:0; z-index:1000; backdrop-filter:blur(8px) saturate(
 .nav-links{display:flex; gap:1rem}
 
 /* Hero */
-.hero{padding:4rem 0 3rem}
-.hero-grid{display:grid; grid-template-columns:.9fr 1.1fr; gap:2rem; align-items:center}
-.frame{background:var(--glass); border:1px solid var(--border); border-radius:28px; box-shadow:var(--shadow); padding:.6rem; overflow:hidden}
+.hero{padding:3.2rem 0 2.2rem}
+.hero-grid{display:grid; grid-template-columns:.8fr 1.2fr; gap:2rem; align-items:center}
+.frame{padding:.6rem}
 .avatar{aspect-ratio:4/5; object-fit:cover; width:100%; border-radius:22px}
+.frame.glass{max-width:420px}
 .tag{display:inline-block; padding:.35rem .65rem; border:1px solid var(--border); border-radius:999px; color:var(--muted); font-size:.9rem}
 h1{margin:.6rem 0 1rem; font-size:clamp(1.8rem,4vw,2.6rem)}
 .lead{color:var(--muted); font-size:clamp(1rem,2.3vw,1.12rem)}
@@ -57,137 +79,115 @@ h1{margin:.6rem 0 1rem; font-size:clamp(1.8rem,4vw,2.6rem)}
 .icon-btn{width:42px; height:42px; display:grid; place-items:center; border-radius:12px; background:var(--glass); border:1px solid var(--border)}
 
 /* Sections */
-section{padding:2.5rem 0}
+section{padding:2.2rem 0}
 
-/* Categories row */
-.row4{display:grid; grid-template-columns:repeat(4,1fr); gap:1rem}
+/* ---------- Portfolio Categories ---------- */
+.categories{position:relative}
+.particles{position:absolute; inset:0; z-index:0; pointer-events:none; opacity:.35}
+.row4{display:grid; grid-template-columns:repeat(4,1fr); gap:1rem; position:relative; z-index:1}
 
-/* Card (glossy, tilt, wiggle) */
+/* Card wrapper (anchor) */
 .card{
-  position:relative; display:flex; flex-direction:column; /* label then preview (downward) */
-  background:
-    radial-gradient(110% 160% at 20% -40%, rgba(255,255,255,.10) 0%, rgba(255,255,255,0) 60%),
-    linear-gradient(180deg, rgba(255,255,255,.10), rgba(255,255,255,.02) 70%, rgba(0,0,0,.10) 100%);
-  border:1px solid var(--border); border-radius:var(--r); overflow:hidden; min-height:auto;
-  box-shadow:0 1px 0 rgba(255,255,255,.10) inset, 0 0 0 1px rgba(134,189,255,.08), var(--shadow);
-  text-decoration:none; transform:translateY(8px); opacity:0;
-  transition:transform .6s ease, opacity .6s ease, box-shadow .25s ease, filter .25s ease;
-  backdrop-filter:blur(8px) saturate(125%); will-change:transform;
-  perspective:900px;
-  animation:float var(--float) ease-in-out infinite;
-  cursor:url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18"><circle cx="9" cy="9" r="4" fill="%23a9d8ff"/></svg>') 9 9, pointer;
+  position:relative; text-decoration:none; cursor:url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18"><circle cx="9" cy="9" r="4" fill="%23a9d8ff"/></svg>') 9 9, pointer;
 }
-@keyframes float{
-  0%{ transform:translateY(2px) rotate(-.2deg) }
-  25%{ transform:translateY(-3px) rotate(.25deg) }
-  50%{ transform:translateY(1px) rotate(-.15deg) }
-  75%{ transform:translateY(-2px) rotate(.2deg) }
-  100%{ transform:translateY(2px) rotate(-.2deg) }
+.card .tilt{
+  display:flex; flex-direction:column;
+  transition:transform var(--anim), filter .25s ease, box-shadow .25s ease;
+  transform-style:preserve-3d; will-change:transform;
 }
-.row4 .card:nth-child(2){animation-delay:.5s}
-.row4 .card:nth-child(3){animation-delay:1.0s}
-.row4 .card:nth-child(4){animation-delay:1.5s}
+.card .tilt.glass{overflow:visible}
 
-.card.reveal{transform:none; opacity:1}
-.card:hover{box-shadow:0 1px 0 rgba(255,255,255,.14) inset, 0 0 0 1px rgba(134,189,255,.16), 0 24px 70px rgba(0,0,0,.6); filter:saturate(1.05); animation-play-state:paused}
-.card::before{ /* sheen + tint */
-  content:""; position:absolute; inset:0;
-  background:
-    linear-gradient( to bottom, rgba(255,255,255,.28), rgba(255,255,255,0) 32%),
-    radial-gradient(140% 60% at 120% -20%, rgba(102,194,255,.20) 0%, rgba(102,194,255,0) 60%);
-  mix-blend-mode:screen; opacity:.22; pointer-events:none; transition:opacity .25s ease;
+/* sheen */
+.tilt::before{
+  content:""; position:absolute; inset:0; mix-blend-mode:screen; opacity:.22; pointer-events:none;
+  background:linear-gradient(to bottom, rgba(255,255,255,.28), rgba(255,255,255,0) 32%), radial-gradient(140% 60% at 120% -20%, rgba(102,194,255,.20) 0%, rgba(102,194,255,0) 60%);
+  transition:opacity .25s ease;
 }
-.card:hover::before{opacity:.34}
-.card::after{ /* microscopic noise to avoid banding */
-  content:""; position:absolute; inset:0; pointer-events:none; opacity:.07; mix-blend-mode:overlay;
-  background-image: url('data:image/svg+xml;utf8,\
-  <svg xmlns="http://www.w3.org/2000/svg" width="64" height="64">\
-  <filter id="n"><feTurbulence type="fractalNoise" baseFrequency="0.8" numOctaves="2" stitchTiles="stitch"/></filter>\
-  <rect width="64" height="64" filter="url(%23n)" opacity=".35"/></svg>');
-}
+.card:hover .tilt::before{opacity:.34}
 
-/* Label (always visible) + sheen sweep */
+/* thumb (top, opens downward) */
+.thumb{
+  width:100%;
+  max-height:0; overflow:hidden; opacity:0;
+  transition:max-height var(--anim), opacity var(--anim);
+}
+.thumb img{
+  width:100%; height:var(--thumb-open); object-fit:cover;
+  transform:translateY(8px) scale(1.01);
+  transition:transform .85s cubic-bezier(.16,.84,.24,1), filter .3s ease;
+  filter:saturate(1.04);
+}
+.thumb .parallax{position:absolute; inset:-20px; pointer-events:none; opacity:.2}
+
+/* label (bottom, always visible) */
 .label{
   display:flex; align-items:center; justify-content:space-between; gap:.8rem;
-  padding:.9rem 1rem; background:linear-gradient(180deg, rgba(15,25,50,.22), rgba(15,25,50,.10));
-  border-bottom:1px solid rgba(255,255,255,.08); backdrop-filter:blur(8px) saturate(120%);
-  position:relative; overflow:hidden;
+  padding:.9rem 1rem;
+  background:linear-gradient(180deg, rgba(15,25,50,.22), rgba(15,25,50,.10));
+  border-top:1px solid rgba(255,255,255,.08);
+  position:relative; overflow:hidden; border-radius:0 0 var(--r) var(--r);
 }
 .label h3{margin:0; font-size:1.06rem; color:#8fd0ff}
 .arrow{font-size:1.2rem; opacity:.78; transition:transform .22s ease}
 .card:hover .arrow{transform:translateX(1px)}
-.label::after{ /* sweep */
-  content:""; position:absolute; top:-120%; left:-40%; width:60%; height:300%;
-  transform:rotate(20deg); background:linear-gradient(90deg, transparent 0%, rgba(255,255,255,.25) 50%, transparent 100%);
+.label::after{
+  content:""; position:absolute; bottom:-120%; left:-40%; width:60%; height:300%; transform:rotate(20deg);
+  background:linear-gradient(90deg, transparent 0%, rgba(255,255,255,.25) 50%, transparent 100%);
   opacity:0; transition:opacity .3s ease;
 }
 .card:hover .label::after{opacity:.7; animation:sheen .9s ease}
 @keyframes sheen{from{transform:translateX(-120%) rotate(20deg)}to{transform:translateX(220%) rotate(20deg)}}
 
-/* Grow-shadow under card when open */
-.drop{
-  position:absolute; left:10px; right:10px; bottom:6px; height:14px; border-radius:999px;
+/* drop shadow grows on open */
+.drop{position:absolute; left:10px; right:10px; bottom:6px; height:14px; border-radius:999px;
   background:radial-gradient(60% 80% at 50% 50%, rgba(0,0,0,.45), transparent 70%);
-  opacity:0; filter:blur(2px); transition:opacity var(--anim), transform var(--anim);
-  transform:scale(.9);
+  opacity:0; filter:blur(2px); transform:scale(.9);
+  transition:opacity var(--anim), transform var(--anim);
 }
 
-/* Preview opens downward (GPU clip-path) */
-.thumb{
-  width:100%; height:var(--thumb-open); /* fixed area; we reveal via clip */
-  clip-path:inset(100% 0 0 0 round 0 0 var(--r) var(--r)); /* hidden (from top) */
-  transition:clip-path var(--anim);
-  position:relative; background:none; overflow:hidden;
-}
-.thumb img{
-  width:100%; height:100%; object-fit:cover;
-  transform:translateY(8px) scale(1.01); transition:transform .85s cubic-bezier(.16,.84,.24,1);
-  filter:saturate(1.04);
-}
-/* tiny parallax layer */
-.thumb .parallax{
-  position:absolute; inset:-20px; pointer-events:none; background:
-    radial-gradient(2px 2px at 10% 20%, rgba(255,255,255,.25) 0, transparent 60%),
-    radial-gradient(2px 2px at 70% 40%, rgba(255,255,255,.22) 0, transparent 60%),
-    radial-gradient(1.5px 1.5px at 30% 80%, rgba(255,255,255,.18) 0, transparent 60%);
-  opacity:.25; transition:transform var(--anim);
-}
-
-/* Open state (hover/focus, and also by .open class on touch) */
+/* hover open + lift */
 .card:hover .thumb,
 .card.open .thumb,
-.card:focus-within .thumb{
-  clip-path:inset(0 0 0 0 round 0 0 var(--r) var(--r));
-}
+.card:focus-within .thumb{max-height:var(--thumb-open); opacity:1}
 .card:hover .thumb img,
 .card.open .thumb img,
-.card:focus-within .thumb img{
-  transform:translateY(0) scale(1.03); /* micro spring overshoot */
-}
+.card:focus-within .thumb img{transform:translateY(0) scale(1.03)}
 .card:hover .drop,
 .card.open .drop,
-.card:focus-within .drop{
-  opacity:1; transform:scale(1);
-}
+.card:focus-within .drop{opacity:1; transform:scale(1)}
+.card:hover .tilt{transform:translateY(var(--lift-shift)) scale(var(--lift-scale)); filter:saturate(1.05)}
 
-/* Stagger the hover start a touch */
-.row4 .card:nth-child(1) .thumb{ transition-delay:0ms }
-.row4 .card:nth-child(2) .thumb{ transition-delay:60ms }
-.row4 .card:nth-child(3) .thumb{ transition-delay:120ms }
-.row4 .card:nth-child(4) .thumb{ transition-delay:180ms }
+/* stagger */
+.row4 .card:nth-child(2) .thumb{transition-delay:60ms}
+.row4 .card:nth-child(3) .thumb{transition-delay:120ms}
+.row4 .card:nth-child(4) .thumb{transition-delay:180ms}
 
 /* Footer */
 footer{padding:2.5rem 0 3.5rem; color:var(--muted)}
 .footer-row{display:flex; justify-content:space-between; align-items:center; gap:1rem; border-top:1px solid var(--border); padding-top:1rem}
 
+/* ---------- Toolbox (#17) ---------- */
+.tools-grid{display:grid; grid-template-columns:repeat(6,1fr); gap:12px}
+.tool{display:flex; align-items:center; gap:10px; padding:12px 14px; border-radius:14px; border:1px solid var(--border); background:rgba(255,255,255,.06)}
+.tool i{width:24px; height:24px; display:inline-block; border-radius:6px; background:linear-gradient(180deg,#8fd0ff,#3c6ea6)}
+.tool span{font-size:.95rem}
+
+/* ---------- Recommendations (capsules) ---------- */
+.recos{display:grid; grid-template-columns:repeat(3,1fr); gap:16px}
+.capsule{border-radius:999px; padding:18px 22px; border:1px solid var(--border); position:relative; overflow:hidden}
+.capsule.glass{background:linear-gradient(180deg, rgba(255,255,255,.10), rgba(255,255,255,.02))}
+.quote{font-size:1rem; line-height:1.5}
+.person{display:flex; align-items:center; gap:10px; margin-top:10px; color:#cfe7ff; font-size:.92rem}
+.person .avatar{width:28px; height:28px; border-radius:50%; object-fit:cover}
+
 /* Responsive */
-@media (max-width:980px){ .hero-grid{grid-template-columns:1fr} }
-@media (max-width:900px){ .row4{grid-template-columns:repeat(2,1fr)} }
-@media (max-width:560px){ .row4{grid-template-columns:1fr} }
+@media (max-width:980px){ .hero-grid{grid-template-columns:1fr} .frame.glass{max-width:520px} }
+@media (max-width:900px){ .row4{grid-template-columns:repeat(2,1fr)} .tools-grid{grid-template-columns:repeat(3,1fr)} .recos{grid-template-columns:1fr} }
+@media (max-width:560px){ .row4{grid-template-columns:1fr} .tools-grid{grid-template-columns:repeat(2,1fr)} }
 
 @media (prefers-reduced-motion:reduce){
   *{animation:none!important; transition:.01ms!important; scroll-behavior:auto!important}
-  .thumb{clip-path:inset(0 0 0 0 round 0 0 var(--r) var(--r))}
+  .thumb{max-height:0!important; opacity:1!important}
 }
 </style>
 </head>
@@ -200,6 +200,8 @@ footer{padding:2.5rem 0 3.5rem; color:var(--muted)}
     <nav class="nav-links" aria-label="Primary">
       <a href="#about">About Me</a>
       <a href="#portfolio">Portfolio</a>
+      <a href="#toolbox">Toolbox</a>
+      <a href="#recs">Recommendations</a>
       <a href="#contact">Contact</a>
     </nav>
   </div>
@@ -209,7 +211,7 @@ footer{padding:2.5rem 0 3.5rem; color:var(--muted)}
   <!-- HERO -->
   <section id="about" class="container hero">
     <div class="hero-grid">
-      <div class="frame reveal"><img class="avatar" src="avatar.jpg" alt="Portrait of Shayan Hezarkhani"></div>
+      <div class="frame glass reveal"><img class="avatar" src="avatar.jpg" alt="Portrait of Shayan Hezarkhani" loading="eager" decoding="async"></div>
       <div>
         <span class="tag">Motion Designer — Available for collaborations</span>
         <h1>Hi, I’m Shayan Hezarkhani.</h1>
@@ -217,80 +219,132 @@ footer{padding:2.5rem 0 3.5rem; color:var(--muted)}
           I’m a motion designer driven by storytelling and precision. My work spans explainer videos, product promos, music videos, and 2D/3D animation—often weaving in illustration and sound for a fuller, more cinematic feel. With roots in theatre and visual arts, I love turning complex ideas into simple, memorable motion systems and immersive scenes. I care about visuals that are minimal, refined, and built to connect.
         </p>
         <div class="socials">
-          <a class="icon-btn" href="mailto:shayminhez@gmail.com" aria-label="Email">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M4 7l8 5 8-5"></path><rect x="3" y="5" width="18" height="14" rx="2" ry="2"></rect></svg>
-          </a>
-          <a class="icon-btn" href="https://www.linkedin.com/in/shayan-hezarkhani/" target="_blank" rel="noopener" aria-label="LinkedIn">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M4.98 3.5C4.98 4.88 3.86 6 2.5 6S0 4.88 0 3.5 1.12 1 2.5 1s2.48 1.12 2.48 2.5zM0 24h5V7.98H0V24zM7.5 7.98V24h5v-8.17c0-4.37 5.5-4.72 5.5 0V24h5V13.5c0-8.09-8.76-7.79-10.5-3.81V7.98h-5z"></path></svg>
-          </a>
-          <a class="icon-btn" href="https://t.me/OneandenO" target="_blank" rel="noopener" aria-label="Telegram">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M9.04 15.52l-.38 5.33c.55 0 .8-.24 1.09-.53l2.62-2.51 5.43 3.98c.99.55 1.69.26 1.95-.92l3.54-16.63h.01c.31-1.45-.52-2.02-1.49-1.67l-20.76 8c-1.41.55-1.39 1.34-.24 1.7l5.31 1.66L19.4 6.32c.61-.41 1.17-.18.71.23"></path></svg>
-          </a>
+          <a class="icon-btn" href="mailto:shayminhez@gmail.com" aria-label="Email"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M4 7l8 5 8-5"></path><rect x="3" y="5" width="18" height="14" rx="2" ry="2"></rect></svg></a>
+          <a class="icon-btn" href="https://www.linkedin.com/in/shayan-hezarkhani/" target="_blank" rel="noopener" aria-label="LinkedIn"><svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M4.98 3.5C4.98 4.88 3.86 6 2.5 6S0 4.88 0 3.5 1.12 1 2.5 1s2.48 1.12 2.48 2.5zM0 24h5V7.98H0V24zM7.5 7.98V24h5v-8.17c0-4.37 5.5-4.72 5.5 0V24h5V13.5c0-8.09-8.76-7.79-10.5-3.81V7.98h-5z"></path></svg></a>
+          <a class="icon-btn" href="https://t.me/OneandenO" target="_blank" rel="noopener" aria-label="Telegram"><svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M9.04 15.52l-.38 5.33c.55 0 .8-.24 1.09-.53l2.62-2.51 5.43 3.98c.99.55 1.69.26 1.95-.92l3.54-16.63h.01c.31-1.45-.52-2.02-1.49-1.67l-20.76 8c-1.41.55-1.39 1.34-.24 1.7l5.31 1.66L19.4 6.32c.61-.41 1.17-.18.71.23"></path></svg></a>
         </div>
       </div>
     </div>
   </section>
 
   <!-- PORTFOLIO CATEGORIES -->
-  <section id="portfolio" class="container">
+  <section id="portfolio" class="container categories">
     <h2 style="margin:0 0 1rem;">Portfolio Categories</h2>
+    <canvas id="particles" class="particles" aria-hidden="true"></canvas>
 
     <div class="row4">
-      <a class="card reveal" href="art-direction.html" data-name="Art Direction">
-        <div class="label"><h3>Art Direction</h3><span class="arrow">↗</span></div>
-        <div class="thumb" aria-hidden="true">
-          <div class="parallax"></div>
-          <img src="placeholder-4.jpg" alt="Art Direction preview image">
+      <!-- Art Direction -->
+      <a class="card" href="art-direction.html">
+        <div class="tilt glass">
+          <div class="thumb" aria-hidden="true">
+            <div class="parallax"></div>
+            <img src="placeholder-4.jpg" alt="Art Direction preview image" loading="lazy" decoding="async">
+          </div>
+          <div class="label"><h3>Art Direction</h3><span class="arrow">↗</span></div>
+          <div class="drop" aria-hidden="true"></div>
         </div>
-        <div class="drop" aria-hidden="true"></div>
       </a>
 
-      <a class="card reveal" href="motion-graphics.html" data-name="Motion Graphics">
-        <div class="label"><h3>Motion Graphics</h3><span class="arrow">↗</span></div>
-        <div class="thumb" aria-hidden="true">
-          <div class="parallax"></div>
-          <img src="Earf.gif" alt="Motion Graphics preview animation">
+      <!-- Motion Graphics -->
+      <a class="card" href="motion-graphics.html">
+        <div class="tilt glass">
+          <div class="thumb" aria-hidden="true">
+            <div class="parallax"></div>
+            <img src="Earf.gif" alt="Motion Graphics preview animation" loading="lazy" decoding="async">
+          </div>
+          <div class="label"><h3>Motion Graphics</h3><span class="arrow">↗</span></div>
+          <div class="drop" aria-hidden="true"></div>
         </div>
-        <div class="drop" aria-hidden="true"></div>
       </a>
 
-      <a class="card reveal" href="video-edits.html" data-name="Video Edits">
-        <div class="label"><h3>Video Edits</h3><span class="arrow">↗</span></div>
-        <div class="thumb" aria-hidden="true">
-          <div class="parallax"></div>
-          <img src="placeholder-2.jpg" alt="Video Edits preview image">
+      <!-- Video Edits -->
+      <a class="card" href="video-edits.html">
+        <div class="tilt glass">
+          <div class="thumb" aria-hidden="true">
+            <div class="parallax"></div>
+            <img src="placeholder-2.jpg" alt="Video Edits preview image" loading="lazy" decoding="async">
+          </div>
+          <div class="label"><h3>Video Edits</h3><span class="arrow">↗</span></div>
+          <div class="drop" aria-hidden="true"></div>
         </div>
-        <div class="drop" aria-hidden="true"></div>
       </a>
 
-      <a class="card reveal" href="graphic-design.html" data-name="Graphic Design">
-        <div class="label"><h3>Graphic Design</h3><span class="arrow">↗</span></div>
-        <div class="thumb" aria-hidden="true">
-          <div class="parallax"></div>
-          <img src="placeholder-3.jpg" alt="Graphic Design preview image">
+      <!-- Graphic Design -->
+      <a class="card" href="graphic-design.html">
+        <div class="tilt glass">
+          <div class="thumb" aria-hidden="true">
+            <div class="parallax"></div>
+            <img src="placeholder-3.jpg" alt="Graphic Design preview image" loading="lazy" decoding="async">
+          </div>
+          <div class="label"><h3>Graphic Design</h3><span class="arrow">↗</span></div>
+          <div class="drop" aria-hidden="true"></div>
         </div>
-        <div class="drop" aria-hidden="true"></div>
       </a>
     </div>
   </section>
 
-  <section id="contact"></section>
+  <!-- TOOLBOX -->
+  <section id="toolbox" class="container">
+    <h2 style="margin:0 0 1rem;">Toolbox</h2>
+    <p style="margin:0 0 1rem;color:var(--muted)">Tools I use most across motion, edit, and design.</p>
+    <div class="tools-grid">
+      <div class="tool"><i></i><span>After Effects</span></div>
+      <div class="tool"><i></i><span>Premiere Pro</span></div>
+      <div class="tool"><i></i><span>Blender / C4D</span></div>
+      <div class="tool"><i></i><span>Photoshop</span></div>
+      <div class="tool"><i></i><span>Illustrator</span></div>
+      <div class="tool"><i></i><span>Figma</span></div>
+      <div class="tool"><i></i><span>Audition</span></div>
+      <div class="tool"><i></i><span>DaVinci Resolve</span></div>
+      <div class="tool"><i></i><span>AfterCodecs</span></div>
+      <div class="tool"><i></i><span>HandBrake</span></div>
+      <div class="tool"><i></i><span>Pro Tools</span></div>
+      <div class="tool"><i></i><span>Logic Pro</span></div>
+    </div>
+  </section>
+
+  <!-- RECOMMENDATIONS (capsules) -->
+  <section id="recs" class="container">
+    <h2 style="margin:0 0 1rem;">Recommendations</h2>
+    <div class="recos">
+      <div class="capsule glass">
+        <div class="quote">“Shayan turns complex briefs into clean, compelling motion—always on schedule and with great communication.”</div>
+        <div class="person"><img class="avatar" src="avatar.jpg" alt="" loading="lazy" decoding="async"><span>Alex M., Creative Director at Arc Studio</span></div>
+      </div>
+      <div class="capsule glass">
+        <div class="quote">“He’s a detail-obsessed editor with strong taste. Our clients ask for him by name.”</div>
+        <div class="person"><img class="avatar" src="avatar.jpg" alt="" loading="lazy" decoding="async"><span>Priya S., Producer at Northwave</span></div>
+      </div>
+      <div class="capsule glass">
+        <div class="quote">“Fast iterations, thoughtful typography, and beautiful transitions—Shayan elevates every project he touches.”</div>
+        <div class="person"><img class="avatar" src="avatar.jpg" alt="" loading="lazy" decoding="async"><span>Jon R., Design Lead at Beacon</span></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="contact" class="container">
+    <h2 style="margin:0 0 1rem;">Let’s talk</h2>
+    <div class="glass" style="padding:18px 20px; display:flex; gap:12px; align-items:center; justify-content:space-between;">
+      <div style="color:var(--muted)">Have a brief or open collaboration?</div>
+      <div style="display:flex; gap:.6rem;">
+        <a class="icon-btn" href="mailto:shayminhez@gmail.com" aria-label="Email">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M4 7l8 5 8-5"></path><rect x="3" y="5" width="18" height="14" rx="2" ry="2"></rect></svg>
+        </a>
+        <a class="icon-btn" href="https://www.linkedin.com/in/shayan-hezarkhani/" target="_blank" rel="noopener" aria-label="LinkedIn">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M4.98 3.5C4.98 4.88 3.86 6 2.5 6S0 4.88 0 3.5 1.12 1 2.5 1s2.48 1.12 2.48 2.5zM0 24h5V7.98H0V24zM7.5 7.98V24h5v-8.17c0-4.37 5.5-4.72 5.5 0V24h5V13.5c0-8.09-8.76-7.79-10.5-3.81V7.98h-5z"></path></svg>
+        </a>
+        <a class="icon-btn" href="https://t.me/OneandenO" target="_blank" rel="noopener" aria-label="Telegram">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M9.04 15.52l-.38 5.33c.55 0 .8-.24 1.09-.53l2.62-2.51 5.43 3.98c.99.55 1.69.26 1.95-.92l3.54-16.63h.01c.31-1.45-.52-2.02-1.49-1.67l-20.76 8c-1.41.55-1.39 1.34-.24 1.7l5.31 1.66L19.4 6.32c.61-.41 1.17-.18.71.23"></path></svg>
+        </a>
+      </div>
+    </div>
+  </section>
 </main>
 
 <footer>
   <div class="container footer-row">
     <div>© <span id="year">2025</span> Shayan Hezarkhani</div>
-    <div style="display:flex; gap:.6rem;">
-      <a class="icon-btn" href="mailto:shayminhez@gmail.com" aria-label="Email">
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M4 7l8 5 8-5"></path><rect x="3" y="5" width="18" height="14" rx="2" ry="2"></rect></svg>
-      </a>
-      <a class="icon-btn" href="https://www.linkedin.com/in/shayan-hezarkhani/" target="_blank" rel="noopener" aria-label="LinkedIn">
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M4.98 3.5C4.98 4.88 3.86 6 2.5 6S0 4.88 0 3.5 1.12 1 2.5 1s2.48 1.12 2.48 2.5zM0 24h5V7.98H0V24zM7.5 7.98V24h5v-8.17c0-4.37 5.5-4.72 5.5 0V24h5V13.5c0-8.09-8.76-7.79-10.5-3.81V7.98h-5z"></path></svg>
-      </a>
-      <a class="icon-btn" href="https://t.me/OneandenO" target="_blank" rel="noopener" aria-label="Telegram">
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M9.04 15.52l-.38 5.33c.55 0 .8-.24 1.09-.53l2.62-2.51 5.43 3.98c.99.55 1.69.26 1.95-.92l3.54-16.63h.01c.31-1.45-.52-2.02-1.49-1.67l-20.76 8c-1.41.55-1.39 1.34-.24 1.7l5.31 1.66L19.4 6.32c.61-.41 1.17-.18.71.23"></path></svg>
-      </a>
-    </div>
+    <div style="color:var(--muted)">Portfolio prototype</div>
   </div>
 </footer>
 
@@ -298,46 +352,73 @@ footer{padding:2.5rem 0 3.5rem; color:var(--muted)}
 // year
 document.getElementById('year').textContent = new Date().getFullYear();
 
-// reveal on view
-const io = new IntersectionObserver((entries)=>{
-  entries.forEach(e=>{ if(e.isIntersecting){ e.target.classList.add('reveal'); io.unobserve(e.target);} })
-},{threshold:.2});
+/* Intersection reveal (hero frame) */
+const io = new IntersectionObserver((entries)=>{entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add('reveal'); io.unobserve(e.target)}})},{threshold:.2});
 document.querySelectorAll('.reveal').forEach(el=>io.observe(el));
 
-/* Micro tilt + parallax follow */
+/* Micro tilt + parallax + mobile tap-open */
 const cards = document.querySelectorAll('.card');
 cards.forEach(card=>{
+  const tilt  = card.querySelector('.tilt');
   const thumb = card.querySelector('.thumb');
   const img   = card.querySelector('.thumb img');
-  const para  = card.querySelector('.thumb .parallax');
-  let open = false;
+  const wrap  = card.closest('.categories');
 
-  // hover tilt
-  card.addEventListener('mousemove', (e)=>{
-    const r = card.getBoundingClientRect();
-    const px = (e.clientX - r.left) / r.width - .5;
-    const py = (e.clientY - r.top)  / r.height - .5;
-    const rx = (+py * parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--tilt'))).toFixed(3);
-    const ry = (-px * parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--tilt'))).toFixed(3);
-    card.style.transform = `rotateX(${rx}) rotateY(${ry})`;
-    if (para) para.style.transform = `translate(${ -px*8 }px, ${ -py*8 }px)`;
-  });
-  card.addEventListener('mouseleave', ()=>{
-    card.style.transform = '';
-    if (para) para.style.transform = '';
-  });
+  function setTilt(e){
+    const r=tilt.getBoundingClientRect();
+    const px=(e.clientX-r.left)/r.width-.5, py=(e.clientY-r.top)/r.height-.5;
+    const x=(+py*parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--tilt'))).toFixed(3);
+    const y=(-px*parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--tilt'))).toFixed(3);
+    tilt.style.transform = `translateY(var(--lift-shift)) scale(var(--lift-scale)) rotateX(${x}) rotateY(${y})`;
+    // parallax canvas moves globally; particles handled below
+  }
 
-  // mobile: first tap opens (prevents accidental navigate)
+  card.addEventListener('mousemove', setTilt);
+  card.addEventListener('mouseleave', ()=>tilt.style.transform='');
+
+  // mobile: first tap opens, second tap navigates
+  let openedOnce=false;
   card.addEventListener('click', (e)=>{
-    if (window.matchMedia('(hover: none)').matches && !open){
+    if (matchMedia('(hover: none)').matches && !openedOnce){
       e.preventDefault();
       card.classList.add('open');
-      card.setAttribute('aria-expanded','true');
-      open = true;
-      setTimeout(()=>open=false, 1200); // allow second tap to navigate after short delay
+      openedOnce=true;
+      setTimeout(()=>openedOnce=false, 1200);
     }
   });
 });
+
+/* Particle canvas (parallax) */
+const canvas=document.getElementById('particles'); const ctx=canvas.getContext('2d',{alpha:true});
+function resize(){ const dpr=window.devicePixelRatio||1; const rect=canvas.getBoundingClientRect(); canvas.width=rect.width*dpr; canvas.height=rect.height*dpr; ctx.setTransform(dpr,0,0,dpr,0,0); }
+let dots=[]; function initDots(){
+  const w=canvas.width, h=canvas.height; dots = [];
+  const count=Math.round((w*h)/50000); // scale with size
+  for(let i=0;i<count;i++){
+    dots.push({x:Math.random()*w, y:Math.random()*h, r:Math.random()*1.6+0.4, a:Math.random()*0.5+0.2});
+  }
+}
+let px=0,py=0;
+function draw(){
+  ctx.clearRect(0,0,canvas.width,canvas.height);
+  ctx.fillStyle='#fff';
+  dots.forEach(d=>{
+    ctx.globalAlpha=d.a;
+    ctx.beginPath(); ctx.arc(d.x+px, d.y+py, d.r, 0, Math.PI*2); ctx.fill();
+  });
+  requestAnimationFrame(draw);
+}
+function onMove(e){
+  const rect=canvas.getBoundingClientRect();
+  const cx = (e.clientX-rect.left)/rect.width-.5;
+  const cy = (e.clientY-rect.top)/rect.height-.5;
+  px = -cx*6; py = -cy*6; // small parallax
+}
+if (matchMedia('(prefers-reduced-motion: no-preference)').matches){
+  resize(); initDots(); draw();
+  window.addEventListener('resize', ()=>{resize(); initDots();});
+  window.addEventListener('mousemove', onMove);
+}
 </script>
 </body>
 </html>
