@@ -21,11 +21,10 @@
       --radius:16px;
       --shadow:0 8px 30px rgba(0,0,0,.35);
 
-      /* Cards interaction knobs */
-      --thumb-open: 240px;                       /* preview height on hover */
-      --under-open: 18px;                        /* tiny grow under the label */
-      --anim: .36s cubic-bezier(.16,.84,.24,1);  /* smooth ease-out */
-      --float: 6s;                               /* wiggle duration */
+      /* Card interaction knobs */
+      --thumb-open: 240px;                          /* preview height on hover */
+      --anim: .36s cubic-bezier(.16,.84,.24,1);     /* smooth ease-out */
+      --float: 6s;                                   /* wiggle duration */
     }
 
     *{box-sizing:border-box}
@@ -77,23 +76,23 @@
     /* Sections */
     section{padding:2.5rem 0}
 
-    /* Categories row */
+    /* Portfolio Categories row */
     .row4{display:grid; grid-template-columns:repeat(4,1fr); gap:1rem}
 
-    /* ---------- Card (glossier + zero-g wiggle) ---------- */
+    /* ---------- Card (glossy + zero-g wiggle) ---------- */
     .card{
       position:relative;
-      display:flex; flex-direction:column; justify-content:flex-end;
+      display:flex; flex-direction:column;          /* label first, then preview */
       background:
         radial-gradient(110% 160% at 20% -40%, rgba(255,255,255,.10) 0%, rgba(255,255,255,0) 60%),
         linear-gradient(180deg, rgba(255,255,255,.10), rgba(255,255,255,.02) 70%, rgba(0,0,0,.10) 100%);
       border:1px solid var(--border);
       border-radius:var(--radius);
-      overflow:hidden;                           /* no idle gap above: only label shows */
+      overflow:hidden;                               /* idle shows only the label */
       min-height:auto;
       box-shadow:
-        0 1px 0 rgba(255,255,255,.10) inset,     /* inner rim */
-        0 0 0 1px rgba(134,189,255,.08),         /* faint tinted rim */
+        0 1px 0 rgba(255,255,255,.10) inset,
+        0 0 0 1px rgba(134,189,255,.08),
         var(--shadow);
       text-decoration:none;
       transform:translateY(8px);
@@ -103,7 +102,6 @@
       will-change:transform;
       animation: float var(--float) ease-in-out infinite;
     }
-
     /* zero-g wiggle */
     @keyframes float{
       0%   { transform: translateY(2px) rotate(-.2deg); }
@@ -112,11 +110,10 @@
       75%  { transform: translateY(-2px) rotate(.2deg); }
       100% { transform: translateY(2px) rotate(-.2deg); }
     }
-    /* different phases so they don't sync */
-    .row4 .card:nth-child(1){ animation-delay: 0s }
-    .row4 .card:nth-child(2){ animation-delay: .6s }
-    .row4 .card:nth-child(3){ animation-delay: 1.2s }
-    .row4 .card:nth-child(4){ animation-delay: 1.8s }
+    .row4 .card:nth-child(1){ animation-delay:0s }
+    .row4 .card:nth-child(2){ animation-delay:.6s }
+    .row4 .card:nth-child(3){ animation-delay:1.2s }
+    .row4 .card:nth-child(4){ animation-delay:1.8s }
 
     .card.reveal{transform:none; opacity:1}
     .card:hover{
@@ -125,7 +122,7 @@
         0 0 0 1px rgba(134,189,255,.16),
         0 24px 70px rgba(0,0,0,.6);
       filter:saturate(1.05);
-      animation-play-state: paused; /* pause wiggle for precise hover */
+      animation-play-state: paused; /* stop wiggle on hover */
     }
 
     /* glossy swipe highlight */
@@ -141,16 +138,26 @@
     }
     .card:hover::before{opacity:.34}
 
-    /* Preview area (opens up) */
+    /* Label (always visible at top of the card when opened) */
+    .label{
+      display:flex; align-items:center; justify-content:space-between; gap:.8rem;
+      padding:.9rem 1rem;
+      background:linear-gradient(180deg, rgba(15,25,50,.22), rgba(15,25,50,.10));
+      border-bottom:1px solid rgba(255,255,255,.08);
+      backdrop-filter: blur(8px) saturate(120%);
+    }
+    .label h3{margin:0; font-size:1.06rem; color:#8fd0ff}
+    .arrow{font-size:1.2rem; opacity:.78; transition:transform .22s ease}
+    .card:hover .label .arrow{transform:translateX(1px)}
+
+    /* Preview opens downward (below the label) */
     .thumb{
       width:100%;
-      max-height:0;             /* fully collapsed at idle */
+      max-height:0;                  /* fully collapsed at idle */
       overflow:hidden;
       opacity:0;
       transition:max-height var(--anim), opacity var(--anim);
-      border-bottom:1px solid var(--border);
-      background:#00000020;
-      will-change:max-height;
+      background:none;               /* prevent any tint/bands */
     }
     .thumb img{
       width:100%; height:auto; object-fit:cover; display:block;
@@ -158,31 +165,6 @@
       transition:transform var(--anim), filter var(--anim);
       filter:saturate(1.04);
     }
-
-    /* Under-glow panel: grows downward a bit to sell "stretch from center" */
-    .under{
-      width:100%;
-      height:0;
-      overflow:hidden;
-      transition:height var(--anim), opacity var(--anim);
-      background:
-        linear-gradient(180deg, rgba(102,194,255,.22), rgba(102,194,255,.08) 45%, rgba(0,0,0,0) 100%);
-      opacity:.0;
-      border-top:1px solid rgba(255,255,255,.09);
-    }
-
-    /* Bottom label (always visible) */
-    .label{
-      display:flex; align-items:center; justify-content:space-between; gap:.8rem;
-      padding:.9rem 1rem;
-      background:linear-gradient(180deg, rgba(15,25,50,.22), rgba(15,25,50,.10));
-      border-top:1px solid rgba(255,255,255,.06);
-      backdrop-filter: blur(8px) saturate(120%);
-    }
-    .label h3{margin:0; font-size:1.06rem; color:#8fd0ff}
-    .arrow{font-size:1.2rem; opacity:.78; transition:transform .22s ease}
-
-    /* Hover/focus → open both directions */
     .card:hover .thumb,
     .card:focus-within .thumb{
       max-height:var(--thumb-open);
@@ -190,14 +172,8 @@
     }
     .card:hover .thumb img,
     .card:focus-within .thumb img{
-      transform:translateY(0) scale(1.0);
+      transform:translateY(0) scale(1);
     }
-    .card:hover .under,
-    .card:focus-within .under{
-      height:var(--under-open);
-      opacity:1;
-    }
-    .card:hover .label .arrow{transform:translateX(1px)}
 
     /* Footer */
     footer{padding:2.5rem 0 3.5rem; color:var(--muted)}
@@ -211,7 +187,6 @@
     @media (prefers-reduced-motion:reduce){
       *{animation:none!important; transition:none!important; scroll-behavior:auto!important}
       .thumb{max-height:0!important; opacity:1!important}
-      .under{height:0!important; opacity:1!important}
     }
   </style>
 </head>
@@ -262,38 +237,34 @@
       <div class="row4">
         <!-- Art Direction -->
         <a class="card reveal" href="art-direction.html">
+          <div class="label"><h3>Art Direction</h3><span class="arrow">↗</span></div>
           <div class="thumb" aria-hidden="true">
             <img src="placeholder-4.jpg" alt="Art Direction preview image">
           </div>
-          <div class="under" aria-hidden="true"></div>
-          <div class="label"><h3>Art Direction</h3><span class="arrow">↗</span></div>
         </a>
 
         <!-- Motion Graphics -->
         <a class="card reveal" href="motion-graphics.html">
+          <div class="label"><h3>Motion Graphics</h3><span class="arrow">↗</span></div>
           <div class="thumb" aria-hidden="true">
             <img src="Earf.gif" alt="Motion Graphics preview animation">
           </div>
-          <div class="under" aria-hidden="true"></div>
-          <div class="label"><h3>Motion Graphics</h3><span class="arrow">↗</span></div>
         </a>
 
         <!-- Video Edits -->
         <a class="card reveal" href="video-edits.html">
+          <div class="label"><h3>Video Edits</h3><span class="arrow">↗</span></div>
           <div class="thumb" aria-hidden="true">
             <img src="placeholder-2.jpg" alt="Video Edits preview image">
           </div>
-          <div class="under" aria-hidden="true"></div>
-          <div class="label"><h3>Video Edits</h3><span class="arrow">↗</span></div>
         </a>
 
         <!-- Graphic Design -->
         <a class="card reveal" href="graphic-design.html">
+          <div class="label"><h3>Graphic Design</h3><span class="arrow">↗</span></div>
           <div class="thumb" aria-hidden="true">
             <img src="placeholder-3.jpg" alt="Graphic Design preview image">
           </div>
-          <div class="under" aria-hidden="true"></div>
-          <div class="label"><h3>Graphic Design</h3><span class="arrow">↗</span></div>
         </a>
       </div>
     </section>
