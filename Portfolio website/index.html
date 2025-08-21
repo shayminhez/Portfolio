@@ -5,16 +5,13 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Shayan Hezarkhani | Portfolio</title>
   
-  <!-- GSAP & ScrollTrigger CDN -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.10.0/gsap.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.10.0/ScrollTrigger.min.js"></script>
-
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; }
     body {
       font-family: 'Arial', sans-serif;
       background-color: #121212;
       color: #fff;
+      font-size: 16px;
       margin: 0;
     }
 
@@ -121,8 +118,8 @@
     }
 
     .card {
-      width: 350px; /* Wider cards (more square-like) */
-      height: 350px;
+      width: 350px; /* Make the cards wider */
+      height: 500px; /* Adjust height to be taller, not a square */
       background: rgba(255, 255, 255, 0.1);
       border-radius: 10px;
       backdrop-filter: blur(10px);
@@ -261,20 +258,14 @@
     </form>
   </section>
 
-  <!-- GSAP Scroll Animation -->
+  <!-- JavaScript for Scroll Effect -->
   <script>
-    gsap.registerPlugin(ScrollTrigger);
+    const scrollContainer = document.getElementById('scroll-container');
 
-    gsap.to('.scroll-container', {
-      x: () => -(document.querySelector('.scroll-container').scrollWidth - window.innerWidth),
-      ease: 'none',
-      scrollTrigger: {
-        trigger: '.scroll-section',
-        start: 'top top',
-        end: () => `+=${document.querySelector('.scroll-container').scrollWidth}`,
-        scrub: true,
-        pin: true,
-        anticipatePin: 1
+    window.addEventListener('wheel', (event) => {
+      if (event.deltaY !== 0) {
+        scrollContainer.scrollLeft += event.deltaY;  // Scroll horizontally based on mouse scroll
+        event.preventDefault(); // Prevent default vertical scroll
       }
     });
   </script>
