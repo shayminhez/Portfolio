@@ -1,361 +1,168 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <title>Shayan Hezarkhani — Portfolio</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <meta name="description" content="Motion & Video Designer turning complex ideas into clean, high-impact visuals." />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Motion Designer Portfolio</title>
   <style>
-    :root{
-      --bg:#0b0c10;--fg:#e6e7e9;--muted:#a9acb2;
-      --card:rgba(255,255,255,.06);--glass:rgba(255,255,255,.08);
-      --br:16px;--shadow:0 8px 28px rgba(0,0,0,.25);
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Arial', sans-serif;
+      background-color: #121212;
+      color: #fff;
+      overflow-x: hidden;
     }
-    *{box-sizing:border-box}
-    html,body{height:100%}
-    body{
-      margin:0;color:var(--fg);
-      font:16px/1.6 system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial;
-      background:
-        radial-gradient(1200px 800px at 10% -10%, rgba(255,255,255,.06), transparent 60%),
-        radial-gradient(800px 600px at 100% 10%, rgba(255,255,255,.04), transparent 60%),
-        var(--bg);
+
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      background: rgba(0, 0, 0, 0.5);
+      padding: 20px;
+      backdrop-filter: blur(10px);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
     }
-    a{color:inherit}
-    img{max-width:100%;height:auto;display:block}
+    header .logo {
+      font-size: 24px;
+      font-weight: bold;
+      color: #fff;
+    }
+    header nav a {
+      color: #fff;
+      text-decoration: none;
+      margin-left: 20px;
+    }
 
-    .container{max-width:1120px;margin:0 auto;padding:24px 20px}
-    /* Header */
-    header{position:sticky;top:0;z-index:50;backdrop-filter:blur(12px);background:rgba(0,0,0,.35);border-bottom:1px solid rgba(255,255,255,.12)}
-    nav{display:flex;align-items:center;justify-content:space-between;height:56px}
-    .nav-links a{margin-left:20px;text-decoration:none;opacity:.9}
-    .nav-links a:hover{text-decoration:underline}
+    .hero {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 40px;
+      padding: 40px;
+      align-items: center;
+      justify-items: center;
+    }
+    .hero .text {
+      color: #fff;
+    }
+    .hero h1 {
+      font-size: 48px;
+      margin-bottom: 10px;
+    }
+    .hero p {
+      font-size: 18px;
+      margin-bottom: 20px;
+    }
+    .hero .cta a {
+      padding: 12px 30px;
+      background: #0073e6;
+      color: #fff;
+      text-decoration: none;
+      border-radius: 25px;
+      font-weight: bold;
+    }
 
-    /* Sections */
-    section{margin:72px 0}
-    .grid{display:grid;gap:20px}
-    .two-col{grid-template-columns:1fr 1fr}
-    h1{margin:0 0 4px;font-size:28px}
-    h2{margin:0 0 16px;font-size:22px}
-    p{margin:0}
+    .scroll-container {
+      padding: 60px 20px;
+      overflow-x: scroll;
+      white-space: nowrap;
+    }
 
-    /* Hero */
-    .hero{grid-template-columns:120px 1fr;align-items:center}
-    .portrait{position:relative;width:120px;height:120px;border-radius:20px;overflow:hidden;box-shadow:var(--shadow)}
-    .links a{margin-right:16px;text-decoration:underline}
+    .card {
+      display: inline-block;
+      width: 300px;
+      height: 400px;
+      background: rgba(255, 255, 255, 0.1);
+      margin-right: 20px;
+      border-radius: 10px;
+      backdrop-filter: blur(10px);
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+      overflow: hidden;
+    }
+    .card img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    .card-placeholder {
+      width: 100%;
+      height: 100%;
+      background: #333;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      color: #fff;
+      font-size: 18px;
+      font-weight: bold;
+    }
 
-    /* Cards / chips */
-    .card{background:var(--card);backdrop-filter:blur(12px);border:1px solid rgba(255,255,255,.12);border-radius:var(--br);padding:16px}
-    .chip{display:inline-block;background:var(--card);border:1px solid rgba(255,255,255,.12);border-radius:999px;padding:8px 12px;margin:4px 6px 0 0;font-size:14px}
-
-    /* Skills grid */
-    .skills{grid-template-columns:repeat(4,minmax(0,1fr))}
-    .skill{padding:14px;text-align:center;border-radius:var(--br);background:var(--card);border:1px solid rgba(255,255,255,.12)}
-    .skill img{width:40px;height:40px;object-fit:contain;margin:0 auto 8px}
-
-    /* Case study collage */
-    .cs{display:grid;grid-template-columns:2fr 1fr;border-radius:var(--br);overflow:hidden;border:1px solid rgba(255,255,255,.12);background:var(--card);box-shadow:var(--shadow)}
-    .cs-main{position:relative;aspect-ratio:16/9;overflow:hidden}
-    .cs-main img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:.96}
-    .cs-stills{display:grid;grid-template-rows:1fr 1fr}
-    .cs-stills img{width:100%;height:100%;object-fit:cover}
-    .cs-body{padding:16px}
-    .btn{display:inline-block;padding:8px 14px;border-radius:999px;border:1px solid rgba(255,255,255,.22);background:rgba(255,255,255,.14)}
-
-    /* Light sweep */
-    .sweep{position:relative;overflow:hidden}
-    .sweep:before{content:"";position:absolute;inset:-20%;background:linear-gradient(120deg,transparent 40%,rgba(255,255,255,.28) 50%,transparent 60%);
-      transform:translateX(-120%);transition:transform .8s ease;pointer-events:none}
-    .sweep:hover:before{transform:translateX(120%)}
-
-    /* 3D tilt */
-    .tilt{transform:perspective(800px) rotateX(var(--rx,0)) rotateY(var(--ry,0)) scale3d(1,1,1);transition:transform .12s ease}
-
-    /* Categories orbit */
-    .orbit{position:relative;height:300px;border-radius:var(--br);overflow:hidden;border:1px solid rgba(255,255,255,.12);background:var(--card)}
-    .orb{position:absolute;top:50%;left:50%;width:80px;height:80px;margin:-40px;border-radius:50%;display:flex;align-items:center;justify-content:center;
-      background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.14);backdrop-filter:blur(6px);cursor:pointer}
-    .orb .label{position:absolute;bottom:-28px;opacity:0;transition:all .25s ease;font-size:12px;background:rgba(0,0,0,.45);border:1px solid rgba(255,255,255,.12);padding:4px 8px;border-radius:8px}
-    .orb:hover .label{opacity:1;bottom:-6px}
-
-    /* Modal */
-    .modal{position:fixed;inset:0;background:rgba(0,0,0,.7);backdrop-filter:blur(4px);display:none;align-items:center;justify-content:center;padding:20px;z-index:100}
-    .modal[open]{display:flex}
-    .modal .box{position:relative;width:min(960px,90vw);border-radius:16px;overflow:hidden;background:#000;border:1px solid rgba(255,255,255,.2)}
-    .modal .close{position:absolute;top:10px;right:10px;border:0;background:rgba(255,255,255,.12);color:#fff;border-radius:999px;padding:6px 10px;cursor:pointer}
-
-    /* Footer */
-    footer{border-top:1px solid rgba(255,255,255,.12);background:rgba(0,0,0,.2)}
-    footer .container{display:flex;align-items:center;justify-content:space-between;padding:18px 20px}
-
-    /* Responsive */
-    @media (max-width:900px){ .two-col{grid-template-columns:1fr} .hero{grid-template-columns:90px 1fr} .skills{grid-template-columns:repeat(3,1fr)} .cs{grid-template-columns:1fr} .cs-stills{grid-template-columns:2fr 1fr;grid-template-rows:none} }
-    @media (prefers-reduced-motion: reduce){ .sweep:before{display:none} .tilt{transition:none} }
+    /* Scroll Effect */
+    .scroll-container::-webkit-scrollbar {
+      height: 10px;
+    }
+    .scroll-container::-webkit-scrollbar-thumb {
+      background: #0073e6;
+      border-radius: 10px;
+    }
   </style>
 </head>
 <body>
-  <!-- ========= HEADER ========= -->
+
   <header>
-    <div class="container">
-      <nav>
-        <a href="#" class="brand" style="font-weight:700">Shayan Hezarkhani</a>
-        <div class="nav-links">
-          <a href="#about">About</a>
-          <a href="#work">Work</a>
-          <a href="#contact">Contact</a>
-        </div>
-      </nav>
-    </div>
+    <div class="logo">Your Name</div>
+    <nav>
+      <a href="#work">Work</a>
+      <a href="#about">About</a>
+      <a href="#contact">Contact</a>
+    </nav>
   </header>
 
-  <main class="container">
-    <!-- ========= HERO ========= -->
-    <section id="about" class="grid hero" style="row-gap:0">
-      <div class="portrait tilt sweep">
-        <!-- Replace with your actual portrait: assets/portrait.jpg -->
-        <img src="assets/portrait.jpg" alt="Portrait of Shayan" width="360" height="360" />
-      </div>
-      <div>
-        <h1>Shayan Hezarkhani</h1>
-        <p>Motion &amp; Video Designer turning complex ideas into clean, high-impact visuals.</p>
-        <div class="links" style="margin-top:10px">
-          <!-- CHANGE LINKS -->
-          <a href="mailto:you@example.com">Email</a>
-          <a href="https://instagram.com/" target="_blank" rel="noopener">Instagram</a>
-          <a href="https://linkedin.com/" target="_blank" rel="noopener">LinkedIn</a>
-        </div>
-      </div>
-    </section>
-
-    <!-- ========= SKILLS + SOFT SKILLS ========= -->
-    <section class="grid two-col">
-      <div>
-        <h2>Skills</h2>
-        <div class="grid skills">
-          <!-- COPY/PASTE to add more skills -->
-          <div class="skill tilt sweep">
-            <img src="assets/icons/after-effects.svg" alt="After Effects icon" width="40" height="40" loading="lazy" />
-            <div style="font-size:14px;text-wrap:balance">After Effects</div>
-          </div>
-          <div class="skill tilt sweep">
-            <img src="assets/icons/photoshop.svg" alt="Photoshop icon" width="40" height="40" loading="lazy" />
-            <div style="font-size:14px">Photoshop</div>
-          </div>
-          <div class="skill tilt sweep">
-            <img src="assets/icons/illustrator.svg" alt="Illustrator icon" width="40" height="40" loading="lazy" />
-            <div style="font-size:14px">Illustrator</div>
-          </div>
-          <div class="skill tilt sweep">
-            <img src="assets/icons/premiere.svg" alt="Premiere icon" width="40" height="40" loading="lazy" />
-            <div style="font-size:14px">Premiere</div>
-          </div>
-          <div class="skill tilt sweep">
-            <img src="assets/icons/davinci.svg" alt="DaVinci icon" width="40" height="40" loading="lazy" />
-            <div style="font-size:14px">DaVinci</div>
-          </div>
-          <div class="skill tilt sweep">
-            <img src="assets/icons/blender.svg" alt="Blender icon" width="40" height="40" loading="lazy" />
-            <div style="font-size:14px">Blender</div>
-          </div>
-          <div class="skill tilt sweep">
-            <img src="assets/icons/dragonframe.svg" alt="Dragonframe icon" width="40" height="40" loading="lazy" />
-            <div style="font-size:14px">Dragonframe</div>
-          </div>
-          <div class="skill tilt sweep">
-            <img src="assets/icons/flstudio.svg" alt="FL Studio icon" width="40" height="40" loading="lazy" />
-            <div style="font-size:14px">FL Studio</div>
-          </div>
-        </div>
-      </div>
-      <div>
-        <h2>Soft skills</h2>
-        <div class="card">
-          <!-- COPY/PASTE to change or add chips -->
-          <span class="chip">Reliable</span>
-          <span class="chip">Detail-oriented</span>
-          <span class="chip">Calm under pressure</span>
-          <span class="chip">Fast turnaround</span>
-          <span class="chip">Collaborative</span>
-          <span class="chip">Problem solver</span>
-        </div>
-      </div>
-    </section>
-
-    <!-- ========= CASE STUDIES ========= -->
-    <section id="work">
-      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px">
-        <h2>Case Studies</h2>
-        <a href="#categories" class="btn">Categories</a>
-      </div>
-
-      <!-- ==== CASE STUDY CARD (COPY THIS WHOLE <article> TO ADD MORE) ==== -->
-      <article class="cs">
-        <!-- Dominant video block -->
-        <button class="cs-main sweep tilt" data-video="https://www.youtube.com/watch?v=9ZNAoQlRNc0" aria-label="Play video">
-          <img src="https://img.youtube.com/vi/9ZNAoQlRNc0/maxresdefault.jpg" alt="Showreel Snippet thumbnail" width="1280" height="720" />
-          <span class="btn" style="position:absolute;left:16px;bottom:16px">Play</span>
-        </button>
-
-        <!-- Stills -->
-        <div class="cs-stills">
-          <img class="sweep" src="https://img.youtube.com/vi/9ZNAoQlRNc0/hqdefault.jpg" alt="Showreel still 1" loading="lazy" />
-          <img class="sweep" src="https://img.youtube.com/vi/9ZNAoQlRNc0/sddefault.jpg" alt="Showreel still 2" loading="lazy" />
-        </div>
-
-        <!-- Text -->
-        <div class="cs-body">
-          <h3 style="margin:0 0 6px;font-size:18px">Showreel Snippet</h3>
-          <p>Create an instantly engaging opener that showcases range and clean aesthetics. Minimal typography, tight timing, and clean iconography with elegant easing. Reusable reel intro used across channels with high retention.</p>
-          <div style="margin-top:8px;font-size:13px;opacity:.8">Tools: After Effects, Illustrator, Premiere</div>
-        </div>
-      </article>
-      <!-- ==== /CASE STUDY CARD ==== -->
-
-      <!-- Example empty template you can duplicate:
-      <article class="cs">
-        <button class="cs-main sweep tilt" data-video="assets/videos/your-video.mp4" aria-label="Play video">
-          <img src="assets/stills/project-thumb.jpg" alt="Project thumbnail" width="1280" height="720" />
-          <span class="btn" style="position:absolute;left:16px;bottom:16px">Play</span>
-        </button>
-        <div class="cs-stills">
-          <img class="sweep" src="assets/stills/project-1.jpg" alt="still 1" loading="lazy" />
-          <img class="sweep" src="assets/stills/project-2.jpg" alt="still 2" loading="lazy" />
-        </div>
-        <div class="cs-body">
-          <h3 style="margin:0 0 6px;font-size:18px">Project Title</h3>
-          <p>Problem → approach → outcome paragraph describing your role and how you solved it.</p>
-          <div style="margin-top:8px;font-size:13px;opacity:.8">Tools: After Effects, Blender</div>
-        </div>
-      </article>
-      -->
-
-    </section>
-
-    <!-- ========= CATEGORIES ========= -->
-    <section id="categories">
-      <h2>Categories</h2>
-      <div class="orbit" id="orbit">
-        <!-- COPY/PASTE to add or edit categories -->
-        <a class="orb tilt sweep" href="#work" data-radius="110" data-speed="1">
-          <div class="label">Motion Graphics</div>◎
-        </a>
-        <a class="orb tilt sweep" href="#work" data-radius="140" data-speed="1.2">
-          <div class="label">Video Edits</div>◎
-        </a>
-        <a class="orb tilt sweep" href="#work" data-radius="170" data-speed="1.4">
-          <div class="label">3D</div>◎
-        </a>
-        <a class="orb tilt sweep" href="#work" data-radius="195" data-speed="1.6">
-          <div class="label">Graphic Designs</div>◎
-        </a>
-      </div>
-    </section>
-  </main>
-
-  <!-- ========= FOOTER ========= -->
-  <footer id="contact">
-    <div class="container">
-      <p class="muted" style="opacity:.8">Crafted with care. Let’s build something clean &amp; impactful.</p>
-      <div class="links">
-        <a href="mailto:you@example.com">Email</a>
-        <a href="https://instagram.com/" target="_blank" rel="noopener">Instagram</a>
-        <a href="https://linkedin.com/" target="_blank" rel="noopener">LinkedIn</a>
+  <section class="hero">
+    <div class="text">
+      <h1>Crafting Stunning Motion Designs</h1>
+      <p>High-impact videos, graphics, and animations tailored for your brand</p>
+      <div class="cta">
+        <a href="#contact">Start a Project</a>
       </div>
     </div>
-  </footer>
-
-  <!-- ========= MODAL PLAYER ========= -->
-  <dialog class="modal" id="playerModal" aria-label="Video player">
-    <div class="box">
-      <button class="close" onclick="closeModal()">Close</button>
-      <div style="position:relative;width:100%;aspect-ratio:16/9">
-        <iframe id="playerFrame" src="" title="Video player" loading="lazy"
-                allow="accelerometer;autoplay;clipboard-write;encrypted-media;gyroscope;picture-in-picture;web-share"
-                allowfullscreen style="position:absolute;inset:0;width:100%;height:100%"></iframe>
-        <video id="playerVideo" src="" controls
-               style="display:none;position:absolute;inset:0;width:100%;height:100%"></video>
-      </div>
+    <div class="image">
+      <img src="https://via.placeholder.com/500" alt="Portfolio image" />
     </div>
-  </dialog>
+  </section>
 
-  <script>
-    // ========= Helpers (you don't need to edit below) =========
-    const $ = s => document.querySelector(s);
-    // Modal logic (YouTube/Vimeo or local MP4)
-    const modal = $("#playerModal"), iframe = $("#playerFrame"), videoTag = $("#playerVideo");
-    function ytEmbed(url){
-      const mShort = url.match(/youtu\.be\/([\w-]+)/);
-      const mLong = url.match(/[?&]v=([\w-]+)/);
-      const id = mShort ? mShort[1] : (mLong ? mLong[1] : "");
-      return id ? `https://www.youtube.com/embed/${id}?rel=0` : url;
-    }
-    function openModal(src){
-      if(/youtube\.com|youtu\.be|vimeo\.com/.test(src)){
-        iframe.src = ytEmbed(src);
-        iframe.style.display = "block";
-        videoTag.style.display = "none";
-      } else {
-        iframe.style.display = "none";
-        videoTag.style.display = "block";
-        videoTag.src = src; videoTag.play();
-      }
-      modal.setAttribute("open","");
-      document.body.style.overflow="hidden";
-    }
-    function closeModal(){
-      modal.removeAttribute("open");
-      iframe.src=""; videoTag.pause(); videoTag.src="";
-      document.body.style.overflow="";
-    }
-    window.closeModal = closeModal;
-    document.addEventListener("click", e=>{
-      const btn = e.target.closest(".cs-main");
-      if(btn){ openModal(btn.getAttribute("data-video") || ""); }
-      if(e.target === modal){ closeModal(); }
-    });
-    document.addEventListener("keydown", e=>{ if(e.key === "Escape" && modal.hasAttribute("open")) closeModal(); });
+  <section id="work">
+    <div class="scroll-container">
+      <div class="card">
+        <div class="card-placeholder">Project 1</div>
+      </div>
+      <div class="card">
+        <div class="card-placeholder">Project 2</div>
+      </div>
+      <div class="card">
+        <div class="card-placeholder">Project 3</div>
+      </div>
+      <div class="card">
+        <div class="card-placeholder">Project 4</div>
+      </div>
+      <!-- Add more cards as necessary -->
+    </div>
+  </section>
 
-    // 3D tilt (bounded)
-    function bindTilt(el){
-      let rect;
-      function onMove(e){
-        if(!rect) rect = el.getBoundingClientRect();
-        const cx = rect.left + rect.width/2, cy = rect.top + rect.height/2;
-        const dx = (e.clientX - cx)/rect.width, dy = (e.clientY - cy)/rect.height;
-        el.style.setProperty("--rx", (dy * -12).toFixed(2) + "deg");
-        el.style.setProperty("--ry", (dx * 12).toFixed(2) + "deg");
-      }
-      function reset(){ el.style.setProperty("--rx","0deg"); el.style.setProperty("--ry","0deg"); rect = null; }
-      el.addEventListener("pointermove", onMove);
-      el.addEventListener("pointerleave", reset);
-    }
-    document.querySelectorAll(".tilt").forEach(bindTilt);
+  <section id="about">
+    <div class="text">
+      <h2>About Me</h2>
+      <p>I'm a motion designer and video editor focused on creating visually appealing and engaging animations for brands and individuals.</p>
+    </div>
+  </section>
 
-    // Orbiting category orbs (set speed/radius with data-attrs)
-    const orbit = $("#orbit");
-    const center = () => ({x: orbit.clientWidth/2, y: orbit.clientHeight/2});
-    const orbs = [...document.querySelectorAll(".orb")].map((el, i) => ({
-      el, angle: (Math.PI*2)*(i/orbit.children.length),
-      speed: parseFloat(el.dataset.speed || "1"),
-      r: parseFloat(el.dataset.radius || (110 + i*24))
-    }));
-    function tick(){
-      const c = center();
-      orbs.forEach(o=>{
-        o.angle += 0.002 * o.speed;
-        const x = c.x + Math.cos(o.angle)*o.r;
-        const y = c.y + Math.sin(o.angle)*o.r;
-        o.el.style.transform = `translate(${x-40}px, ${y-40}px)`;
-      });
-      requestAnimationFrame(tick);
-    }
-    const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    if(!reduced) tick();
+  <section id="contact">
+    <div class="text">
+      <h2>Contact</h2>
+      <p>Let's collaborate! Fill in the form below to start your next creative project.</p>
+      <!-- Contact form goes here -->
+    </div>
+  </section>
 
-    // Lazy hints for perf
-    document.querySelectorAll('img[loading="lazy"]').forEach(img=>{
-      img.decoding = "async";
-    });
-  </script>
 </body>
 </html>
