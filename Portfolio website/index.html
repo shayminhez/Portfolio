@@ -111,10 +111,11 @@
       overflow-x: auto;
       scroll-behavior: smooth;
       width: 100%;
+      transition: transform 0.3s ease-in-out;
     }
 
     .card {
-      width: 350px; /* Wider cards */
+      width: 300px; /* Original width */
       height: 400px;
       background: rgba(255, 255, 255, 0.1);
       border-radius: 10px;
@@ -139,11 +140,6 @@
       color: #fff;
       font-size: 18px;
       font-weight: bold;
-    }
-
-    /* Scroll Effect */
-    .scroll-container {
-      transition: transform 0.3s ease-in-out;
     }
 
     /* About Section */
@@ -299,8 +295,8 @@
 
     window.addEventListener('wheel', (event) => {
       if (event.deltaY !== 0) {
-        scrollContainer.scrollLeft += event.deltaY;
-        event.preventDefault(); // Prevent default scrolling
+        scrollContainer.scrollLeft += event.deltaY; // Scroll cards horizontally
+        event.preventDefault(); // Prevent default vertical scrolling
       }
     });
   </script>
