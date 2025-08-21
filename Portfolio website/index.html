@@ -12,6 +12,7 @@
       color: #fff;
       overflow-x: hidden;
       font-size: 16px;
+      margin: 0;
     }
 
     /* Navigation Bar */
@@ -32,6 +33,7 @@
       width: 33%; /* To make it the same width as the center section */
       margin-left: auto;
       margin-right: auto;
+      text-align: center;
     }
 
     .nav-container {
@@ -61,7 +63,7 @@
     }
 
     .logo img {
-      width: 40px; /* Adjust the logo size to fit properly */
+      width: 60px; /* Adjust the logo size */
       height: auto;
       margin-right: 10px;
     }
@@ -99,10 +101,12 @@
       font-weight: bold;
     }
 
+    /* Portfolio Section */
     .scroll-container {
       padding: 60px 20px;
       overflow-x: scroll;
       white-space: nowrap;
+      margin-top: 40px;
     }
 
     .card {
@@ -184,6 +188,28 @@
       outline: 2px solid #0073e6;
     }
 
+    /* Responsiveness */
+    @media (max-width: 768px) {
+      .hero {
+        grid-template-columns: 1fr;
+      }
+
+      .nav-container {
+        flex-direction: column;
+      }
+
+      .logo img {
+        width: 50px;
+      }
+
+      .scroll-container {
+        padding: 20px;
+      }
+
+      .card {
+        width: 250px;
+      }
+    }
   </style>
 </head>
 <body>
@@ -230,6 +256,24 @@
       <div class="card">
         <div class="card-placeholder">Project 4</div>
       </div>
+      <div class="card">
+        <div class="card-placeholder">Project 5</div>
+      </div>
+      <div class="card">
+        <div class="card-placeholder">Project 6</div>
+      </div>
+      <div class="card">
+        <div class="card-placeholder">Project 7</div>
+      </div>
+      <div class="card">
+        <div class="card-placeholder">Project 8</div>
+      </div>
+      <div class="card">
+        <div class="card-placeholder">Project 9</div>
+      </div>
+      <div class="card">
+        <div class="card-placeholder">Project 10</div>
+      </div>
     </div>
   </section>
 
@@ -257,4 +301,3 @@
 
 </body>
 </html>
-
