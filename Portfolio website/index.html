@@ -4,13 +4,17 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Shayan Hezarkhani | Portfolio</title>
+  
+  <!-- GSAP & ScrollTrigger CDN -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.10.0/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.10.0/ScrollTrigger.min.js"></script>
+
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; }
     body {
       font-family: 'Arial', sans-serif;
       background-color: #121212;
       color: #fff;
-      font-size: 16px;
       margin: 0;
     }
 
@@ -62,7 +66,7 @@
     }
 
     .logo img {
-      width: 80px; /* Size of the logo */
+      width: 80px;
       height: auto;
       margin-right: 10px;
     }
@@ -102,42 +106,32 @@
     }
 
     /* Portfolio Section */
+    .scroll-section {
+      position: relative;
+      height: 100vh;
+      overflow: hidden;
+    }
+
     .scroll-container {
       display: flex;
-      padding: 60px 20px;
       gap: 20px;
-      margin-top: 40px;
-      overflow-x: scroll;
-      scroll-behavior: smooth;
-      width: 100%;
+      width: max-content;
+      padding: 20px;
+      position: absolute;
     }
 
     .card {
-      width: 350px; /* Wider card width */
-      height: 400px;
+      width: 350px; /* Wider cards (more square-like) */
+      height: 350px;
       background: rgba(255, 255, 255, 0.1);
       border-radius: 10px;
       backdrop-filter: blur(10px);
       box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
-      overflow: hidden;
-    }
-
-    .card img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-    }
-
-    .card-placeholder {
-      width: 100%;
-      height: 100%;
-      background: #333;
       display: flex;
       justify-content: center;
       align-items: center;
       color: #fff;
-      font-size: 18px;
-      font-weight: bold;
+      font-size: 20px;
     }
 
     /* About Section */
@@ -231,38 +225,18 @@
   </section>
 
   <!-- Portfolio Section -->
-  <section id="work">
+  <section class="scroll-section">
     <div class="scroll-container" id="scroll-container">
-      <div class="card">
-        <div class="card-placeholder">Project 1</div>
-      </div>
-      <div class="card">
-        <div class="card-placeholder">Project 2</div>
-      </div>
-      <div class="card">
-        <div class="card-placeholder">Project 3</div>
-      </div>
-      <div class="card">
-        <div class="card-placeholder">Project 4</div>
-      </div>
-      <div class="card">
-        <div class="card-placeholder">Project 5</div>
-      </div>
-      <div class="card">
-        <div class="card-placeholder">Project 6</div>
-      </div>
-      <div class="card">
-        <div class="card-placeholder">Project 7</div>
-      </div>
-      <div class="card">
-        <div class="card-placeholder">Project 8</div>
-      </div>
-      <div class="card">
-        <div class="card-placeholder">Project 9</div>
-      </div>
-      <div class="card">
-        <div class="card-placeholder">Project 10</div>
-      </div>
+      <div class="card">Project 1</div>
+      <div class="card">Project 2</div>
+      <div class="card">Project 3</div>
+      <div class="card">Project 4</div>
+      <div class="card">Project 5</div>
+      <div class="card">Project 6</div>
+      <div class="card">Project 7</div>
+      <div class="card">Project 8</div>
+      <div class="card">Project 9</div>
+      <div class="card">Project 10</div>
     </div>
   </section>
 
@@ -270,7 +244,6 @@
   <section id="about">
     <h2>About Me</h2>
     <p>I'm a motion designer and video editor focused on creating visually appealing and engaging animations for brands and individuals.</p>
-    <img src="file-4YBDHk2MkZMWLVLfZFn5oZ" alt="About Image" width="200" />
   </section>
 
   <!-- Contact Section -->
@@ -288,13 +261,20 @@
     </form>
   </section>
 
+  <!-- GSAP Scroll Animation -->
   <script>
-    const scrollContainer = document.getElementById('scroll-container');
+    gsap.registerPlugin(ScrollTrigger);
 
-    window.addEventListener('wheel', (event) => {
-      if (event.deltaY !== 0) {
-        scrollContainer.scrollLeft += event.deltaY; // Scroll cards horizontally
-        event.preventDefault(); // Prevent default vertical scrolling
+    gsap.to('.scroll-container', {
+      x: () => -(document.querySelector('.scroll-container').scrollWidth - window.innerWidth),
+      ease: 'none',
+      scrollTrigger: {
+        trigger: '.scroll-section',
+        start: 'top top',
+        end: () => `+=${document.querySelector('.scroll-container').scrollWidth}`,
+        scrub: true,
+        pin: true,
+        anticipatePin: 1
       }
     });
   </script>
