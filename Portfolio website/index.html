@@ -29,13 +29,16 @@
       background: rgba(0, 0, 0, 0.5);
       backdrop-filter: blur(10px);
       border: 1px solid rgba(255, 255, 255, 0.1);
+      width: 33%; /* To make it the same width as the center section */
+      margin-left: auto;
+      margin-right: auto;
     }
 
     .nav-container {
       display: flex;
       justify-content: space-around;
       align-items: center;
-      width: 33%;
+      width: 100%;
       font-size: 18px;
       color: white;
     }
@@ -62,6 +65,14 @@
       font-weight: bold;
       text-decoration: underline;
       color: white;
+      display: flex;
+      align-items: center;
+    }
+
+    .logo img {
+      width: 30px;
+      height: 30px;
+      margin-right: 10px;
     }
 
     /* Hero Section */
@@ -189,7 +200,10 @@
   <!-- Navigation Bar -->
   <header>
     <div class="nav-container">
-      <div class="logo">Shayan Hezarkhani</div>
+      <div class="logo">
+        <img src="file-EQQr96FYHpuNMHhHmSCTRf" alt="Logo" />
+        Shayan Hezarkhani
+      </div>
       <a href="#work" class="nav-item">Cases</a>
       <a href="#about" class="nav-item">About</a>
       <a href="#resume" class="nav-item">Resume</a>
