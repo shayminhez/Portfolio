@@ -63,7 +63,7 @@
     }
 
     .logo img {
-      width: 80px; /* Increased logo size */
+      width: 80px;
       height: auto;
       margin-right: 10px;
     }
@@ -104,13 +104,12 @@
 
     /* Portfolio Section */
     .scroll-container {
-      padding: 60px 20px;
-      overflow-x: hidden;
-      white-space: nowrap;
       display: flex;
-      flex-wrap: nowrap;
+      padding: 60px 20px;
+      overflow-x: auto;
       gap: 20px;
       margin-top: 40px;
+      scroll-behavior: smooth;
     }
 
     .card {
@@ -139,16 +138,6 @@
       color: #fff;
       font-size: 18px;
       font-weight: bold;
-    }
-
-    /* Scroll Effect */
-    .scroll-container {
-      animation: scroll-left 10s linear infinite;
-    }
-
-    @keyframes scroll-left {
-      0% { transform: translateX(0); }
-      100% { transform: translateX(-100%); }
     }
 
     /* About Section */
