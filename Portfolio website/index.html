@@ -7,21 +7,30 @@
   <meta name="description" content="Senior UX/UI designer portfolio — projects, products, testimonials, and contact." />
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet">
   <style>
     :root {
       --bg: #0b0d12;
+      --bg-alt:#0e1219;
       --card: #11141b;
-      --muted: #9aa3b2;
+      --muted: #aeb7c6; /* improved contrast */
       --text: #e8ecf3;
       --brand: #7dd3fc; /* cyan-300 */
       --accent: #a78bfa; /* violet-400 */
       --ring: rgba(125, 211, 252, 0.35);
       --radius: 16px;
       --shadow: 0 10px 30px rgba(0,0,0,.35);
+      --maxw: 1150px;
     }
+
+    /* Ensure hidden elements actually hide even if inline styles exist */
+    [hidden]{display:none !important}
+
     *{box-sizing:border-box}
     html,body{height:100%}
+    html{scroll-behavior:smooth}
+    @media (prefers-reduced-motion: reduce){ html{scroll-behavior:auto} }
+
     body{
       margin:0; font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, "Helvetica Neue", Arial, "Apple Color Emoji","Segoe UI Emoji";
       background: radial-gradient(1200px 700px at 20% -10%, rgba(124,58,237,.25), transparent 60%),
@@ -30,11 +39,22 @@
       color: var(--text);
       line-height:1.6; letter-spacing:.2px;
     }
-    a{color:inherit; text-decoration:none}
-    .container{max-width:1150px; margin:0 auto; padding:0 24px}
+    img{display:block; max-width:100%; height:auto}
+
+    /* Focus visibility */
+    a:focus-visible, button:focus-visible, summary:focus-visible, input:focus-visible, textarea:focus-visible{
+      outline: 2px solid var(--brand);
+      outline-offset: 2px; border-radius: 8px;
+    }
+
+    .container{max-width:var(--maxw); margin:0 auto; padding:0 24px}
 
     /* Header */
     header{position:sticky; top:0; z-index:50; backdrop-filter: blur(10px); background: rgba(11,13,18,.55); border-bottom:1px solid rgba(255,255,255,.06)}
+    /* Fallback when backdrop-filter unsupported */
+    @supports not (backdrop-filter: blur(10px)){
+      header{background: rgba(11,13,18,.9)}
+    }
     .nav{display:flex; align-items:center; justify-content:space-between; height:68px}
     .brand{display:flex; align-items:center; gap:10px; font-weight:800; letter-spacing:.2px}
     .brand .dot{display:inline-block; width:10px; height:10px; border-radius:50%; background:linear-gradient(135deg, var(--brand), var(--accent)); box-shadow:0 0 0 4px var(--ring)}
@@ -47,16 +67,19 @@
     .hero{padding:74px 0 24px}
     .hero-grid{display:grid; grid-template-columns:1.2fr .8fr; gap:40px}
     .eyebrow{color:var(--brand); font-weight:700; letter-spacing:.3px; text-transform:uppercase; font-size:12px}
-    h1{font-size:44px; line-height:1.1; margin:.2em 0 .4em}
+    h1{font-family: "DM Serif Display", serif; font-size:44px; line-height:1.1; margin:.2em 0 .4em}
     .lead{color:#c6cfdd; font-size:18px; max-width:62ch}
-    .chiprow{display:flex; flex-wrap:wrap; gap:10px; margin-top:16px}
+
+    /* chips as a proper list */
+    .chiprow{display:flex; flex-wrap:wrap; gap:10px; margin-top:16px; list-style:none; padding:0; margin-left:0}
     .chip{border:1px solid rgba(255,255,255,.08); padding:8px 12px; border-radius:999px; color:#c8d2e2; background:rgba(255,255,255,.03)}
+
     .hero-card{border:1px solid rgba(255,255,255,.08); background: linear-gradient(180deg, rgba(255,255,255,.02), rgba(255,255,255,.01)); border-radius:var(--radius); padding:18px; box-shadow: var(--shadow)}
     .thumbs{display:grid; grid-template-columns:repeat(3,1fr); gap:10px}
-    .thumbs img{width:100%; height:120px; object-fit:cover; border-radius:12px; border:1px solid rgba(255,255,255,.08)}
+    .thumbs img{width:100%; height:auto; aspect-ratio:4/3; object-fit:cover; border-radius:var(--radius); border:1px solid rgba(255,255,255,.08)}
 
     /* Sections */
-    section{padding:64px 0}
+    section{padding:64px 0; scroll-margin-top: 80px}
     .section-title{font-size:28px; margin:0 0 16px}
     .sub{color:var(--muted); max-width:62ch}
 
@@ -70,8 +93,8 @@
     /* Projects */
     .grid-3{display:grid; grid-template-columns:repeat(3,1fr); gap:22px}
     .proj{display:flex; flex-direction:column; gap:12px}
-    .proj .cover{position:relative; border-radius:14px; overflow:hidden; border:1px solid rgba(255,255,255,.08)}
-    .proj .cover img{display:block; width:100%; height:180px; object-fit:cover}
+    .proj .cover{position:relative; border-radius:var(--radius); overflow:hidden; border:1px solid rgba(255,255,255,.08)}
+    .proj .cover img{display:block; width:100%; height:auto; aspect-ratio:16/9; object-fit:cover}
     .proj .cover .pill{position:absolute; top:10px; left:10px; background:rgba(0,0,0,.45); padding:6px 10px; border-radius:999px; font-size:12px}
     .proj h4{margin:0}
     .proj p{margin:0; color:#c4ccda}
@@ -79,10 +102,10 @@
 
     /* Gallery */
     .gallery{display:grid; grid-template-columns:repeat(4,1fr); gap:10px}
-    .gallery img{width:100%; height:140px; object-fit:cover; border-radius:12px; border:1px solid rgba(255,255,255,.08)}
+    .gallery img{width:100%; height:auto; aspect-ratio:4/3; object-fit:cover; border-radius:var(--radius); border:1px solid rgba(255,255,255,.08)}
 
     /* Products */
-    .products{display:grid; grid-template-columns:repeat(3,1fr); gap:22px}
+    .products{display:grid; grid-template-columns:repeat(2,1fr); gap:22px}
     .price{font-weight:700; color:#e3f2ff}
 
     /* Testimonials */
@@ -107,18 +130,19 @@
     .center{text-align:center}
 
     /* Responsive */
-    @media (max-width: 980px){
+    @media (max-width: 1100px){
       .hero-grid{grid-template-columns:1fr}
+      .thumbs{grid-template-columns:repeat(2,1fr)}
       .grid-3{grid-template-columns:1fr 1fr}
       .gallery{grid-template-columns:1fr 1fr}
-      .products{grid-template-columns:1fr 1fr}
+      .products{grid-template-columns:1fr}
       .quotes{grid-template-columns:1fr}
     }
-    @media (max-width: 640px){
+    @media (max-width: 560px){
+      .thumbs{grid-template-columns:1fr}
       .grid-2{grid-template-columns:1fr}
       .grid-3{grid-template-columns:1fr}
       .gallery{grid-template-columns:1fr}
-      .products{grid-template-columns:1fr}
       h1{font-size:36px}
     }
   </style>
@@ -129,7 +153,7 @@
     <div class="container nav">
       <a class="brand" href="#top" aria-label="Home"><span class="dot"></span><span>YourName.</span></a>
       <nav class="links" aria-label="Primary">
-        <a href="#projects">Cases</a>
+        <a href="#cases">Cases</a>
         <a href="#about">About</a>
         <a href="#resume" target="_blank" rel="noopener">Resume</a>
         <a class="cta" href="#contact">Contact</a>
@@ -142,26 +166,26 @@
     <div class="container hero-grid">
       <div>
         <div class="eyebrow">Experience‑led product & visual design</div>
-        <h1>Designing people‑friendly digital journeys</h1>
+        <h1>Crafting people‑friendly digital journeys!</h1>
         <p class="lead">Senior UX/UI designer crafting web and mobile experiences across fintech and SaaS. I blend product thinking with visual systems to ship elegant, accessible interfaces.</p>
-        <div class="chiprow" role="list">
-          <span class="chip" role="listitem">Design systems</span>
-          <span class="chip" role="listitem">Web apps</span>
-          <span class="chip" role="listitem">Marketing sites</span>
-          <span class="chip" role="listitem">Accessibility</span>
-          <span class="chip" role="listitem">No‑/Low‑code</span>
-        </div>
+        <ul class="chiprow" role="list">
+          <li class="chip" role="listitem">Design systems</li>
+          <li class="chip" role="listitem">Web apps</li>
+          <li class="chip" role="listitem">Marketing sites</li>
+          <li class="chip" role="listitem">Accessibility</li>
+          <li class="chip" role="listitem">No‑/Low‑code</li>
+        </ul>
         <p style="margin-top:18px"><a class="pillbtn" href="#about">Get to know me →</a></p>
       </div>
       <div class="hero-card" aria-label="Selected work thumbnails">
         <div class="thumbs">
           <!-- Replace these with your own images -->
-          <img alt="Project thumb" src="https://images.unsplash.com/photo-1522071820081-009f0129c71c?q=80&w=800&auto=format&fit=crop" />
-          <img alt="Dashboard UI" src="https://images.unsplash.com/photo-1556157382-97eda2d62296?q=80&w=800&auto=format&fit=crop" />
-          <img alt="Mobile UI" src="https://images.unsplash.com/photo-1551650975-87deedd944c3?q=80&w=800&auto=format&fit=crop" />
-          <img alt="Charts" src="https://images.unsplash.com/photo-1543286386-2e659306cd6c?q=80&w=800&auto=format&fit=crop" />
-          <img alt="Cards" src="https://images.unsplash.com/photo-1563013544-824ae1b704d3?q=80&w=800&auto=format&fit=crop" />
-          <img alt="Team" src="https://images.unsplash.com/photo-1521737604893-d14cc237f11d?q=80&w=800&auto=format&fit=crop" />
+          <img loading="lazy" alt="Project thumb" src="https://images.unsplash.com/photo-1522071820081-009f0129c71c?q=80&w=800&auto=format&fit=crop" />
+          <img loading="lazy" alt="Dashboard UI" src="https://images.unsplash.com/photo-1556157382-97eda2d62296?q=80&w=800&auto=format&fit=crop" />
+          <img loading="lazy" alt="Mobile UI" src="https://images.unsplash.com/photo-1551650975-87deedd944c3?q=80&w=800&auto=format&fit=crop" />
+          <img loading="lazy" alt="Charts" src="https://images.unsplash.com/photo-1543286386-2e659306cd6c?q=80&w=800&auto=format&fit=crop" />
+          <img loading="lazy" alt="Cards" src="https://images.unsplash.com/photo-1563013544-824ae1b704d3?q=80&w=800&auto=format&fit=crop" />
+          <img loading="lazy" alt="Team" src="https://images.unsplash.com/photo-1521737604893-d14cc237f11d?q=80&w=800&auto=format&fit=crop" />
         </div>
       </div>
     </div>
@@ -198,7 +222,7 @@
   </section>
 
   <!-- PROJECTS -->
-  <section id="projects">
+  <section id="cases">
     <div class="container">
       <h2 class="section-title">Design highlights</h2>
       <p class="sub">A selection of recent projects. Swap these with your case studies and link to detailed pages.</p>
@@ -206,7 +230,7 @@
         <article class="proj">
           <div class="cover">
             <span class="pill">Enterprise Website</span>
-            <img alt="Enterprise web" src="https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?q=80&w=1200&auto=format&fit=crop" />
+            <img loading="lazy" alt="Enterprise web" src="https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?q=80&w=1200&auto=format&fit=crop" />
           </div>
           <h4>Platform & web experience design</h4>
           <p>Scaled a multi‑language marketing site with a component library and faster releases.</p>
@@ -215,7 +239,7 @@
         <article class="proj">
           <div class="cover">
             <span class="pill">Case Study</span>
-            <img alt="Help experience" src="https://images.unsplash.com/photo-1553877522-43269d4ea984?q=80&w=1200&auto=format&fit=crop" />
+            <img loading="lazy" alt="Help experience" src="https://images.unsplash.com/photo-1553877522-43269d4ea984?q=80&w=1200&auto=format&fit=crop" />
           </div>
           <h4>Assistance flows for a SaaS product</h4>
           <p>Reimagined help content and entry points to boost task completion.</p>
@@ -224,7 +248,7 @@
         <article class="proj">
           <div class="cover">
             <span class="pill">Web App</span>
-            <img alt="Productivity tool" src="https://images.unsplash.com/photo-1551281044-8d8d0d8f1d49?q=80&w=1200&auto=format&fit=crop" />
+            <img loading="lazy" alt="Productivity tool" src="https://images.unsplash.com/photo-1551281044-8d8d0d8f1d49?q=80&w=1200&auto=format&fit=crop" />
           </div>
           <h4>Community & productivity platform</h4>
           <p>Built modular UI for social rooms, tasks, and live sessions.</p>
@@ -241,14 +265,14 @@
       <h2 class="section-title">Design playground</h2>
       <p class="sub">Explorations and experiments. Replace with your Dribbble shots or image grid.</p>
       <div class="gallery" style="margin-top:18px">
-        <img alt="Shot 1" src="https://images.unsplash.com/photo-1512295767273-ac109ac3acfa?q=80&w=800&auto=format&fit=crop"/>
-        <img alt="Shot 2" src="https://images.unsplash.com/photo-1552581234-26160f608093?q=80&w=800&auto=format&fit=crop"/>
-        <img alt="Shot 3" src="https://images.unsplash.com/photo-1556157381-97b7a24b5b40?q=80&w=800&auto=format&fit=crop"/>
-        <img alt="Shot 4" src="https://images.unsplash.com/photo-1556157382-97eda2d62296?q=80&w=800&auto=format&fit=crop"/>
-        <img alt="Shot 5" src="https://images.unsplash.com/photo-1551650975-87deedd944c3?q=80&w=800&auto=format&fit=crop"/>
-        <img alt="Shot 6" src="https://images.unsplash.com/photo-1520975916090-3105956dac38?q=80&w=800&auto=format&fit=crop"/>
-        <img alt="Shot 7" src="https://images.unsplash.com/photo-1497366811353-6870744d04b2?q=80&w=800&auto=format&fit=crop"/>
-        <img alt="Shot 8" src="https://images.unsplash.com/photo-1515879218367-8466d910aaa4?q=80&w=800&auto=format&fit=crop"/>
+        <img loading="lazy" alt="Shot 1" src="https://images.unsplash.com/photo-1512295767273-ac109ac3acfa?q=80&w=800&auto=format&fit=crop"/>
+        <img loading="lazy" alt="Shot 2" src="https://images.unsplash.com/photo-1552581234-26160f608093?q=80&w=800&auto=format&fit=crop"/>
+        <img loading="lazy" alt="Shot 3" src="https://images.unsplash.com/photo-1556157381-97b7a24b5b40?q=80&w=800&auto=format&fit=crop"/>
+        <img loading="lazy" alt="Shot 4" src="https://images.unsplash.com/photo-1556157382-97eda2d62296?q=80&w=800&auto=format&fit=crop"/>
+        <img loading="lazy" alt="Shot 5" src="https://images.unsplash.com/photo-1551650975-87deedd944c3?q=80&w=800&auto=format&fit=crop"/>
+        <img loading="lazy" alt="Shot 6" src="https://images.unsplash.com/photo-1520975916090-3105956dac38?q=80&w=800&auto=format&fit=crop"/>
+        <img loading="lazy" alt="Shot 7" src="https://images.unsplash.com/photo-1497366811353-6870744d04b2?q=80&w=800&auto=format&fit=crop"/>
+        <img loading="lazy" alt="Shot 8" src="https://images.unsplash.com/photo-1515879218367-8466d910aaa4?q=80&w=800&auto=format&fit=crop"/>
       </div>
     </div>
   </section>
@@ -260,25 +284,18 @@
       <p class="sub">Digital kits and resources. Link to Gumroad/UI8/etc. Pricing below is placeholder.</p>
       <div class="products" style="margin-top:18px">
         <div class="card">
-          <img alt="Illustration kit" src="https://images.unsplash.com/photo-1521737604893-d14cc237f11d?q=80&w=1200&auto=format&fit=crop" style="width:100%; height:160px; object-fit:cover; border-radius:10px; border:1px solid rgba(255,255,255,.08)"/>
+          <img loading="lazy" alt="Illustration kit" src="https://images.unsplash.com/photo-1521737604893-d14cc237f11d?q=80&w=1200&auto=format&fit=crop" style="width:100%; height:160px; object-fit:cover; border-radius:10px; border:1px solid rgba(255,255,255,.08)"/>
           <h3 style="margin:10px 0 4px">Workaholics Illustration Kit</h3>
           <div class="price">$28</div>
           <p style="color:#c9d3e4">Minimal, hand‑off ready assets for dashboards and marketing pages.</p>
-          <p><a class="pillbtn" href="#">Learn more</a></p>
+          <p><a class="pillbtn" href="https://example.com/workaholics" target="_blank" rel="noopener">Learn more</a></p>
         </div>
         <div class="card">
-          <img alt="Pack" src="https://images.unsplash.com/photo-1545239351-1141bd82e8a6?q=80&w=1200&auto=format&fit=crop" style="width:100%; height:160px; object-fit:cover; border-radius:10px; border:1px solid rgba(255,255,255,.08)"/>
+          <img loading="lazy" alt="Pack" src="https://images.unsplash.com/photo-1545239351-1141bd82e8a6?q=80&w=1200&auto=format&fit=crop" style="width:100%; height:160px; object-fit:cover; border-radius:10px; border:1px solid rgba(255,255,255,.08)"/>
           <h3 style="margin:10px 0 4px">Minimal Illustration Kit</h3>
           <div class="price">$26</div>
           <p style="color:#c9d3e4">Clean, vector‑ready scenes made for product teams.</p>
-          <p><a class="pillbtn" href="#">Learn more</a></p>
-        </div>
-        <div class="card">
-          <img alt="Geometric group" src="https://images.unsplash.com/photo-1541976076758-347942db1970?q=80&w=1200&auto=format&fit=crop" style="width:100%; height:160px; object-fit:cover; border-radius:10px; border:1px solid rgba(255,255,255,.08)"/>
-          <h3 style="margin:10px 0 4px">The Geometric Group</h3>
-          <div class="price">$24</div>
-          <p style="color:#c9d3e4">Abstract shapes and scenes for quick UI mockups.</p>
-          <p><a class="pillbtn" href="#">Learn more</a></p>
+          <p><a class="pillbtn" href="https://example.com/minimal-kit" target="_blank" rel="noopener">Learn more</a></p>
         </div>
       </div>
     </div>
@@ -296,14 +313,6 @@
         <blockquote>
           <p>“Exceptionally well‑rounded designer; empathetic, thoughtful, and impact‑driven.”</p>
           <footer>— D. J., Lecturer & Researcher</footer>
-        </blockquote>
-        <blockquote>
-          <p>“Delivered on time with great quality across multiple visual projects.”</p>
-          <footer>— J. F. C., COO</footer>
-        </blockquote>
-        <blockquote>
-          <p>“Top‑tier design skills and professionalism; a great teammate with high EQ.”</p>
-          <footer>— M. H., Founder</footer>
         </blockquote>
       </div>
     </div>
@@ -324,10 +333,6 @@
       <details>
         <summary>What tools do you use?</summary>
         <p>Figma for core design, plus Webflow, Adobe tools, Notion, and FigJam for collaboration.</p>
-      </details>
-      <details>
-        <summary>Do you work solo or in teams?</summary>
-        <p>Both. I’ve led solo deliveries and collaborated with cross‑functional teams.</p>
       </details>
     </div>
   </section>
@@ -354,16 +359,79 @@
     </div>
   </footer>
 
-  <!-- PROJECT MODAL (accessibile) -->
+  <!-- PROJECT MODAL (accessible) -->
   <div id="project-modal" role="dialog" aria-modal="true" aria-labelledby="project-title" hidden style="position:fixed; inset:0; display:grid; place-items:center; background:rgba(3,6,12,.6); backdrop-filter: blur(6px); z-index:60;">
     <article style="width:min(920px, 92vw); max-height:86vh; overflow:auto; background:var(--card); border:1px solid rgba(255,255,255,.12); border-radius:18px; box-shadow: var(--shadow);">
       <header style="display:flex; align-items:center; justify-content:space-between; padding:16px 18px; border-bottom:1px solid rgba(255,255,255,.08)">
         <h3 id="project-title" style="margin:0; font-size:20px">Case study</h3>
         <button id="modal-close" class="pillbtn" aria-label="Close">Close ✕</button>
       </header>
-      <div id="project-body" style="padding:18px 18px 24px; color:#cbd5e1">
-        <p>This modal shows a project summary. Click any “Learn more” in the grid to open it. Replace this text with your real case‑study intro, roles, timeline, goals, and outcomes. Add images or videos as needed.</p>
-        <ul
+      <div id="project-body" style="padding:18px 18px 24px; color:#cbd5e1"></div>
+    </article>
+  </div>
+
+  <script>
+    // Year
+    document.getElementById('y').textContent = new Date().getFullYear();
+
+    // ===== Accessible modal logic with focus trap and return focus =====
+    const modal = document.getElementById('project-modal');
+    const bodyEl = document.getElementById('project-body');
+    const titleEl = document.getElementById('project-title');
+    const closeBtn = document.getElementById('modal-close');
+    let lastFocus = null;
+
+    function getFocusable(container){
+      return [...container.querySelectorAll('a[href], button, textarea, input, select, [tabindex]:not([tabindex="-1"])')]
+        .filter(el => !el.hasAttribute('disabled') && el.offsetParent !== null);
+    }
+
+    function trapFocus(e){
+      if(e.key !== 'Tab') return;
+      const focusables = getFocusable(modal);
+      if(!focusables.length) return;
+      const first = focusables[0], last = focusables[focusables.length - 1];
+      if(e.shiftKey && document.activeElement === first){ e.preventDefault(); last.focus(); }
+      else if(!e.shiftKey && document.activeElement === last){ e.preventDefault(); first.focus(); }
+    }
+
+    function openModal(fromCard){
+      lastFocus = document.activeElement;
+      const h4 = fromCard.querySelector('h4')?.textContent || 'Case study';
+      const imgSrc = fromCard.querySelector('.cover img')?.getAttribute('src');
+
+      titleEl.textContent = h4;
+      // Build safe body content without string HTML injection
+      bodyEl.innerHTML = '';
+      const p = document.createElement('p');
+      p.textContent = `A focused write‑up of ${h4} with goals, constraints, and process. Replace this text with your own narrative: discovery → definition → design → delivery → impact.`;
+      const ol = document.createElement('ol');
+      ['Problem & users','Constraints & KPIs','Explorations & rationale','Outcome & learnings'].forEach(t=>{ const li = document.createElement('li'); li.textContent = t; ol.appendChild(li); });
+      const img = document.createElement('img');
+      img.alt = h4; img.src = imgSrc; img.style.width = '100%'; img.style.height = '320px'; img.style.objectFit = 'cover'; img.style.borderRadius='12px'; img.style.border='1px solid rgba(255,255,255,.08)';
+      bodyEl.append(p, ol, img);
+
+      modal.hidden = false;
+      document.body.style.overflow = 'hidden';
+      document.addEventListener('keydown', trapFocus);
+      closeBtn.focus();
+    }
+
+    function closeModal(){
+      modal.hidden = true;
+      document.body.style.overflow = '';
+      document.removeEventListener('keydown', trapFocus);
+      if(lastFocus) lastFocus.focus();
+    }
+
+    document.querySelectorAll('.proj a.more').forEach(link => {
+      link.addEventListener('click', e => { e.preventDefault(); openModal(link.closest('.proj')); });
+    });
+
+    closeBtn.addEventListener('click', closeModal);
+    modal.addEventListener('click', (e) => { if(e.target === modal) closeModal(); });
+    window.addEventListener('keydown', (e)=>{ if(!modal.hidden && e.key === 'Escape') closeModal(); });
+  </script>
 
   <!--
     HOW TO USE
